@@ -4,28 +4,62 @@ const port = 5000;
 const multer = require('multer');
 const fs = require('fs');
 const cors = require('cors');
-const user = require('./public/user.json');
 const allUsers = require('./public/AllUsers.json');
-
+const checkUser = require('./checking')
+const currentUser = require('./public/CurrentUser.json')
 app.use(express.json());
 app.use(cors());
 
 
-app.get('/user', (req, res) => {
-    res.send(user);
-})
-
 app.post('/user', (req, res) => {
-    const {firstName, lastName, telephone} = req.body.post
-    fs.writeFile('./public/user.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
+    const {
+        firstName,
+        lastName,
+        telephone,
+        email,
+        password
+    } = req.body.post
+    fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
         if (err) console.log('Error here');
     })
-    console.log(req.body.post)
-    allUsers.push({'firstName' : firstName , 'lastName' : lastName, 'telephone' : telephone})
-    fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2) ,(err, data)=>{
-        if(err)console.log('Error here')
-    } )
+    allUsers.push({
+        'firstName': firstName,
+        'lastName': lastName,
+        'telephone': telephone,
+        'email': email,
+        'password': password
+    })
+    fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
+        if (err) console.log('Error here');
+    })
     res.send('Updated');
+})
+
+
+app.post('/userlogin', (req, res) => {
+    if (checkUser(req.body)) {
+        fs.writeFile('./public/CurrentUser.json', JSON.stringify(allUsers[checkLogin(req.body)], null, 2), (err, data) => {
+            if (err) console.log('Error in POST/userlogin');
+        })
+    }
+    res.send(currentUser);
+})
+
+app.get('/userlogin', (req, res) => {
+    res.send(currentUser);
+})
+
+app.post('/userprofile', (req, res) => {
+    if (checkUser(req.body)) {
+        const userIndex = checkUser(req.body);
+        allUsers[userIndex] = req.body.post;
+        fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
+            if (err) console.log('Error in POST /userprofile');
+        });
+        fs.writeFile('./public/CurrentUser.json', JSON.stringify(allUsers[userIndex], null, 2), (err, data) => {
+            if (err) console.log('Error in POST /userprofile');
+        });
+    };
 })
 
 app.listen(port, () => {

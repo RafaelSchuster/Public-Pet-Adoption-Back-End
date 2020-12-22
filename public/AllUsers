@@ -73,11 +73,10 @@
     "lastName": "ll"
   },
   {
-    "firstName": "mghjk",
+    "firstName": "ma",
     "lastName": "m",
     "telephone": "1",
     "email": "m",
-    "password": "m",
-    "bio": "Testing Bio"
+    "password": "m"
   }
 ]
