@@ -10,4 +10,16 @@ const checkUser = (userData) => {
     return false;
 }
 
-module.exports = checkUser;
+const checkById = (log, id) => {
+    for (let i = 0; i < log.length; i++) {
+        if (log[i].id == id){
+           return i; 
+        } 
+    }
+    return false;
+}
+
+
+
+
+module.exports = {checkUser,checkById};

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 2,
+    "name": "d",
+    "type": "dcc",
+    "breed": "dd"
+  },
+  {
+    "id": 3,
+    "name": "Billy",
+    "type": "Dog",
+    "breed": "poodle",
+    "color": "Brown",
+    "height": "3",
+    "weight": "5",
+    "dietRestrictions": "no barley",
+    "petBio": "nice dog"
+  },
+  {
+    "id": 24,
+    "name": "a",
+    "type": "a",
+    "breed": "a",
+    "color": "a",
+    "height": "3",
+    "weight": "1",
+    "dietRestrictions": "aaa",
+    "petBio": "vvv",
+    "petStatus": "adopted",
+    "hypoalergenic": "Yes"
+  }
+]
