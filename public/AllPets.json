@@ -1,12 +1,19 @@
 [
   {
-    "id": 2,
-    "name": "d",
-    "type": "dcc",
-    "breed": "dd"
+    "id": "2",
+    "name": "bonny",
+    "breed": "shepherd",
+    "type": "dog",
+    "color": "blonde",
+    "height": "5",
+    "weight": "6",
+    "petStatus": "adopted",
+    "hypoalergenic": "No",
+    "dietRestrictions": "no chocolate",
+    "petBio": "Cool Doggy"
   },
   {
-    "id": 3,
+    "id": "3",
     "name": "Billy",
     "type": "Dog",
     "breed": "poodle",
