@@ -1,7 +1,27 @@
 [
   {
     "id": "2",
-    "FileName": "dog2.jpg",
-    "FilePath": "images\\2- dog2.jpg -0.9813436461614371.jpg"
+    "FileName": "2-dog.jpg",
+    "FilePath": "images\\2-dog.jpg"
+  },
+  {
+    "id": "3",
+    "FileName": "3-cat.jpg",
+    "FilePath": "images\\3-cat.jpg"
+  },
+  {
+    "id": "24",
+    "FileName": "24-giraffe.jpg",
+    "FilePath": "images\\24-giraffe.jpg"
+  },
+  {
+    "id": "31",
+    "FileName": "31-dog2.jpg",
+    "FilePath": "images\\31-dog2.jpg"
+  },
+  {
+    "id": "30",
+    "FileName": "30-cat.jpg",
+    "FilePath": "images\\30-cat.jpg"
   }
 ]

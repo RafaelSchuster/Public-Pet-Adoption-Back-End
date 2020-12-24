@@ -12,14 +12,25 @@ const checkUser = (userData) => {
 
 const checkById = (log, id) => {
     for (let i = 0; i < log.length; i++) {
-        if (log[i].id == id){
-           return i; 
-        } 
+        if (log[i].id == id) {
+            return i;
+        }
+    }
+    return false;
+}
+
+const getIdByParams = (log, name, type) => {
+    for (let i = 0; i < log.length; i++) {
+        if (log[i].name == name && log[i].type == type) {
+            return i;
+        };
     }
     return false;
 }
 
 
-
-
-module.exports = {checkUser,checkById};
+module.exports = {
+    checkUser,
+    checkById,
+    getIdByParams
+};

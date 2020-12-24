@@ -4,14 +4,14 @@ const port = 5000;
 const multer = require('multer');
 const fs = require('fs');
 const cors = require('cors');
-const path = require('path')
+const path = require('path');
 const allUsers = require('./public/AllUsers.json');
-const currentUser = require('./public/CurrentUser.json')
-const allPets = require('./public/AllPets.json')
-const userCount = require('./public/UserCount.json')
-const petCount = require('./public/PetCount.json')
-const images = require('./public/ImagesLog.json')
-const { checkUser, checkById } = require('./checking')
+const currentUser = require('./public/CurrentUser.json');
+const allPets = require('./public/AllPets.json');
+const userCount = require('./public/UserCount.json');
+const petCount = require('./public/PetCount.json');
+const images = require('./public/ImagesLog.json');
+const { checkUser, checkById, getIdByParams } = require('./checking');
 app.use(express.json());
 app.use(cors());
 
@@ -20,29 +20,36 @@ const storage = multer.diskStorage({
     destination: './images',
     filename: (req, file, cb) => {
         const { id } = req.params
-        cb(null,`${id}- ${file.originalname} -${Math.random()}${path.extname(file.originalname)}`);
+        cb(null, `${id}-${file.originalname}`);
     }
 });
 
-const upload = multer({ storage});
+const upload = multer({ storage });
 app.use(express.static('images'));
 
 app.post('/image_upload/:id', upload.single('file'), (req, res, next) => {
     const { id } = req.params
+    const { originalname } = req.file
     const logObj = {
         'id': id,
-        "FileName": req.file.originalname,
-        "FilePath": req.file.path,   
+        "FileName": `${id}-${originalname}`,
+        "FilePath": req.file.path,
     }
-    images.push(logObj);
-    fs.writeFile('./public/ImagesLog.json', JSON.stringify(images, null, 2), (err, data) => {
-        if (err) console.log('Errorrr');
-    })
-    res.send('Done');
+    if (checkById(images, id) === false) {
+        images.push(logObj);
+        fs.writeFile('./public/ImagesLog.json', JSON.stringify(images, null, 2), (err, data) => {
+            if (err) console.log('Error in Image Upload');
+        })
+    }
+    else if (checkById(images, id) >= 0) {
+        images[checkById(images, id)] = logObj;
+        fs.writeFile('./public/ImagesLog.json', JSON.stringify(images, null, 2), (err, data) => {
+            if (err) console.log('Error in Image Upload');
+        })
+    }
 });
 
 app.post('/user_sign', (req, res) => {
-    console.log(userCount)
     userCount.push({
         'a': 'a'
     })
@@ -101,11 +108,10 @@ app.post('/userprofile', (req, res) => {
 })
 
 app.get('/all_users', (req, res) => {
-    res.send(allUsers)
+    res.send(allUsers);
 })
 
 app.post('/pet_profile', (req, res) => {
-    console.log(req.body)
     petCount.push({
         'b': 'b'
     })
@@ -148,44 +154,47 @@ app.post('/pet_profile', (req, res) => {
 })
 
 app.get('/allpets', (req, res) => {
-    res.send(allPets)
+    res.send(allPets);
 })
 
 app.get('/users/:id', (req, res) => {
-    const { id } = req.params
-    res.send(allUsers[checkById(allUsers, id)])
+    const { id } = req.params;
+    res.send(allUsers[checkById(allUsers, id)]);
 })
 app.get('/pets/:id', (req, res) => {
-    const { id } = req.params
-    res.send(allPets[checkById(allPets, id)])
+    const { id } = req.params;
+    res.send(allPets[checkById(allPets, id)]);
 })
 
 app.post('/user_admin_edit', (req, res) => {
-    const{id} = req.body.post
-    allUsers[checkById(allUsers, id)] = {...allUsers[checkById(allUsers, req.id)],...req.body.post}
+    const { id } = req.body.post;
+    allUsers[checkById(allUsers, id)] = { ...allUsers[checkById(allUsers, req.id)], ...req.body.post }
     fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
         if (err) console.log('Error in POST /userprofile');
     });
     fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
         if (err) console.log('Error here');
-    })
-    res.send('yes')
+    });
+    res.send('yes');
 })
 
 app.post('/pet_admin_edit', (req, res) => {
-    const{id} = req.body.post
-    allPets[checkById(allPets, id)] = {...allPets[checkById(allPets, req.id)],...req.body.post}
+    const { id } = req.body.post;
+    allPets[checkById(allPets, id)] = { ...allPets[checkById(allPets, req.id)], ...req.body.post }
     fs.writeFile('./public/AllPets.json', JSON.stringify(allPets, null, 2), (err, data) => {
         if (err) console.log('Error in POST /petprofile');
     });
-    res.send('yes')
+    res.send('yes');
 })
 
-app.get('/images/:id', (req, res) =>{
-    const {id} = req.params
-    
+app.get('/images/:id', (req, res) => {
+    const { id } = req.params;
+    res.send(images[checkById(images, id)]);
 })
-
+app.get('/pet_id/:name/type/:type', (req, res) => {
+    const { name, type } = req.params;
+    res.send(`${allPets[getIdByParams(allPets, name, type)].id}`);
+})
 
 app.listen(port, () => {
     console.log('Running on Port 5000');
