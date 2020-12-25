@@ -87,5 +87,42 @@
     "petBio": "new",
     "petStatus": "",
     "hypoalergenic": "Yes"
+  },
+  {
+    "id": 32,
+    "name": "a",
+    "type": "a",
+    "breed": "a",
+    "color": "a",
+    "height": "1",
+    "weight": "1",
+    "petStatus": "",
+    "hypoalergenic": "Yes"
+  },
+  {
+    "id": 33,
+    "name": "a",
+    "type": "a",
+    "breed": "a",
+    "color": "a",
+    "height": "1",
+    "weight": "1",
+    "dietRestrictions": "a",
+    "petBio": "a",
+    "petStatus": "adopted",
+    "hypoalergenic": "Yes"
+  },
+  {
+    "id": 34,
+    "name": "b",
+    "type": "b",
+    "breed": "b",
+    "color": "b",
+    "height": "1",
+    "weight": "1",
+    "dietRestrictions": "b",
+    "petBio": "b",
+    "petStatus": "adopted",
+    "hypoalergenic": "Yes"
   }
 ]

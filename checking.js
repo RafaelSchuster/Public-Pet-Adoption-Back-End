@@ -1,4 +1,5 @@
 const allUsers = require('./public/AllUsers.json');
+const allPets = require('./public/AllPets.json')
 
 const checkUser = (userData) => {
     for (let i = 0; i < allUsers.length; i++) {
@@ -28,9 +29,32 @@ const getIdByParams = (log, name, type) => {
     return false;
 }
 
+const getPetsByType = (type) => {
+    let arrPets = []
+    for (let i = 0; i < allPets.length; i++) {
+        if (allPets[i].type.toLowerCase() == type.toLowerCase()) {
+            arrPets.push(allPets[i])
+        }
+    }
+    return arrPets
+}
+
+const getPetAdv = (status, height, weight, type, name) => {
+    for (let i = 0; i < allPets.length; i++) {
+        if (allPets[i].petStatus == status && allPets[i].height == height &&
+            allPets[i].weight == weight && allPets[i].type == type &&
+            allPets[i].name == name) {
+                return allPets[i]
+            }
+    }
+    return false
+}
+
 
 module.exports = {
     checkUser,
     checkById,
-    getIdByParams
+    getIdByParams,
+    getPetsByType,
+    getPetAdv
 };

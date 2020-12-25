@@ -11,7 +11,7 @@ const allPets = require('./public/AllPets.json');
 const userCount = require('./public/UserCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
-const { checkUser, checkById, getIdByParams } = require('./checking');
+const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
 
@@ -194,6 +194,18 @@ app.get('/images/:id', (req, res) => {
 app.get('/pet_id/:name/type/:type', (req, res) => {
     const { name, type } = req.params;
     res.send(`${allPets[getIdByParams(allPets, name, type)].id}`);
+})
+
+app.get('/search_type/:type', (req, res)=>{
+    const {type} = req.params
+    res.send(getPetsByType(type))
+})
+
+app.get('/adv_search', (req, res)=>{
+    const {status, height, weight, type, name} = req.query
+    const result = getPetAdv(status, height, weight, type, name)
+    console.log(result)
+    res.send(result)
 })
 
 app.listen(port, () => {
