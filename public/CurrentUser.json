@@ -1,14 +1,7 @@
 {
-  "id": "3",
-  "firstName": "nnbbll",
-  "lastName": "nn",
-  "telephone": "33",
-  "email": "m@n",
-  "petsOwned": [
-    "2",
-    "3",
-    "24",
-    "30"
-  ],
-  "bio": "cvcvcvcv"
+  "firstName": "bb",
+  "lastName": "bb",
+  "telephone": "4",
+  "email": "b@b",
+  "password": "bb"
 }

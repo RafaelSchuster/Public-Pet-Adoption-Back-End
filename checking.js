@@ -30,13 +30,13 @@ const getIdByParams = (log, name, type) => {
 }
 
 const getPetsByType = (type) => {
-    let arrPets = []
+    let arrPets = [];
     for (let i = 0; i < allPets.length; i++) {
         if (allPets[i].type.toLowerCase() == type.toLowerCase()) {
-            arrPets.push(allPets[i])
-        }
+            arrPets.push(allPets[i]);
+        };
     }
-    return arrPets
+    return arrPets;
 }
 
 const getPetAdv = (status, height, weight, type, name) => {
@@ -44,10 +44,10 @@ const getPetAdv = (status, height, weight, type, name) => {
         if (allPets[i].petStatus == status && allPets[i].height == height &&
             allPets[i].weight == weight && allPets[i].type == type &&
             allPets[i].name == name) {
-                return allPets[i]
-            }
+            return allPets[i];
+        };
     }
-    return false
+    return false;
 }
 
 
@@ -56,5 +56,5 @@ module.exports = {
     checkById,
     getIdByParams,
     getPetsByType,
-    getPetAdv
+    getPetAdv,
 };

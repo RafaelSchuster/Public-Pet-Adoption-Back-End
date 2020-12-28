@@ -50,17 +50,11 @@
     "hypoalergenic": "Yes"
   },
   {
-    "id": 29,
-    "name": "cvcv",
-    "type": "cxc",
-    "breed": "ghfgf",
-    "color": "cvcv",
-    "height": "6",
-    "weight": "6",
-    "dietRestrictions": "gfgfg",
-    "petBio": "fgfgfg",
+    "id": "29",
+    "breed": "yeba",
+    "color": "pompompompom",
     "petStatus": "",
-    "hypoalergenic": "Yes"
+    "dietRestrictions": "no chocolate, barley, cinnamon"
   },
   {
     "id": 30,
@@ -89,15 +83,15 @@
     "hypoalergenic": "Yes"
   },
   {
-    "id": 32,
+    "id": "32",
     "name": "a",
+    "breed": "yuyuy",
     "type": "a",
-    "breed": "a",
-    "color": "a",
-    "height": "1",
-    "weight": "1",
-    "petStatus": "",
-    "hypoalergenic": "Yes"
+    "color": "yoyoy",
+    "petStatus": "adopted",
+    "hypoalergenic": "No",
+    "dietRestrictions": "bbbb",
+    "petBio": "bbbb"
   },
   {
     "id": 33,
@@ -124,5 +118,31 @@
     "petBio": "b",
     "petStatus": "adopted",
     "hypoalergenic": "Yes"
+  },
+  {
+    "id": 35,
+    "name": "yy",
+    "type": "yy",
+    "breed": "yy",
+    "color": "yy",
+    "height": "5",
+    "weight": "5",
+    "dietRestrictions": "55",
+    "petBio": "y66",
+    "petStatus": "adopted",
+    "hypoalergenic": "No"
+  },
+  {
+    "id": 36,
+    "name": "yy",
+    "type": "yy",
+    "breed": "yy",
+    "color": "yy",
+    "height": "5",
+    "weight": "5",
+    "dietRestrictions": "55",
+    "petBio": "y66",
+    "petStatus": "adopted",
+    "hypoalergenic": "No"
   }
 ]
