@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
+const bcrypt = require('bcrypt')
 const app = express();
+const jwt = require('jsonwebtoken')
 const port = 5000;
 const multer = require('multer');
 const fs = require('fs');
@@ -12,129 +14,21 @@ const allPets = require('./public/AllPets.json');
 const userCount = require('./public/UserCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
+const { addUser, addPet, checkLogin, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
+    onUserById, onPetById, onSearchByType, onAdvSearch } = require('./mongoFuncs')
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
 
 
-const { MongoClient, ObjectID } = require('mongodb');
-
-const url = process.env.DB_URL;
-const client = new MongoClient(url, { useUnifiedTopology: true });
-
-client.connect().then(res => {
-    if (res.topology.s.state) {
-        console.log('State:' + '' + res.topology.s.state);
-    }
-})
-
-const dbName = 'pets';
-
-const addUser = async (newUser) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    newUsers = await col.insertOne(newUser);
-}
-
-const addPet = async (newPet) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    newPets = await col.insertOne(newPet);
-}
-
-const checkLogin = async (userData) => {
-    const { email, password } = userData.post;
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    handleLogin = await col.findOne({ email: email, password: password });
-    return handleLogin;
-}
-
-const updateUserProfile = async (userData) => {
-    const { id, firstName, lastName, telephone, email, petsOwned, bio } = userData;
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    updatingUser = await col.updateOne({
-        id: id
-    }, {
-        $set: {
-            id: id, firstName: firstName, lastName: lastName,
-            email: email, telephone: telephone, petsOwned: petsOwned, bio: bio
-        }
-    });
-}
-
-const updatePetProfile = async (petData) => {
-    const { id, type, name, breed, color, height, weight, petStatus, hypoalergenic, dietRestrictions, petBio } = petData;
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    updatingPet = await col.updateOne({
-        id: parseInt(id)
-    }, {
-        $set: {
-            name: name, type: type, breed: breed, color: color, height: height,
-            weight: weight, petStatus: petStatus, hypoalergenic: hypoalergenic,
-            dietRestrictions: dietRestrictions, petBio: petBio
-        }
-    });
-}
-
-const getAllUsers = async () => {
-    const usersArr = [];
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    onGetAllUsers = await col.find({}).toArray();
-    onGetAllUsers.forEach(el => usersArr.push(el));
-    return usersArr;
-}
-
-const getAllPets = async () => {
-    const petsArr = [];
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    onGetAllPets = await col.find({}).toArray();
-    onGetAllPets.forEach(el => petsArr.push(el));
-    return petsArr;
-}
-
-const onUserById = async (id) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    userById = await col.findOne({ id: parseInt(id) });
-    return userById;
-}
-
-const onPetById = async (id) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    petById = await col.findOne({ id: parseInt(id) });
-    return petById;
-}
-
-const onSearchByType = async (type) => {
-    const petByTypeArr = [];
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    petByType = await col.find({ type: type }).toArray();
-    petByType.forEach(pet => petByTypeArr.push(pet));
-    return petByTypeArr;
-}
-
-const onAdvSearch = async (status, height, weight, type, name) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    petAdvSearch = await col.findOne({ type: type, height: height, petStatus: status, weight: weight, name: name });
-    return petAdvSearch;
-}
-
 const storage = multer.diskStorage({
     destination: './images',
     filename: (req, file, cb) => {
+        console.log(req.params)
         const { id } = req.params
-        cb(null, `${id}-${file.originalname}`);
+        cb(null, `${parseInt(id)}-${file.originalname}`);
     }
 });
-
 
 const upload = multer({ storage });
 app.use(express.static('images'));
@@ -143,7 +37,7 @@ app.post('/image_upload/:id', upload.single('file'), (req, res, next) => {
     const { id } = req.params
     const { originalname } = req.file
     const logObj = {
-        'id': id,
+        'id': parseInt(id),
         "FileName": `${id}-${originalname}`,
         "FilePath": req.file.path,
     }
@@ -161,7 +55,7 @@ app.post('/image_upload/:id', upload.single('file'), (req, res, next) => {
     }
 });
 
-app.post('/user_sign', (req, res) => {
+app.post('/user_sign', async (req, res) => {
     userCount.push({
         'a': 'a'
     })
@@ -171,17 +65,20 @@ app.post('/user_sign', (req, res) => {
         telephone,
         email,
         password
+
     } = req.body.post
     fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
         if (err) console.log('Error here');
     })
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     allUsers.push({
         'id': userCount.length,
         'firstName': firstName,
         'lastName': lastName,
         'telephone': telephone,
         'email': email,
-        'password': password
+        'password': hashedPassword
     })
     const newUser = {
         id: userCount.length,
@@ -189,7 +86,7 @@ app.post('/user_sign', (req, res) => {
         lastName: lastName,
         telephone: telephone,
         email: email,
-        password: password
+        password: hashedPassword
     }
     fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
         if (err) console.log('Error here');
@@ -202,21 +99,54 @@ app.post('/user_sign', (req, res) => {
     res.send('Updated');
 })
 
+let user;
 
-app.post('/userlogin', (req, res) => {
+function authenticateToken(req, res, next){
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if(token == null) return res.sendStatus(401)
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) =>{
+      if(err)return res.sendStatus(403)
+      console.log(user)
+      req.user = user
+      next()
+  })
+    
+}
+
+app.post('/userlogin', async (req, res) => {
     // if (checkUser(req.body)) {
     //     fs.writeFile('./public/CurrentUser.json', JSON.stringify(allUsers[checkUser(req.body)], null, 2), (err, data) => {
     //         if (err) console.log('Error in POST/userlogin');
     //     })
     // }
-    res.send(checkLogin(req.body));
+    user = allUsers.find(user => user.email == req.body.post.email)
+    if (user == null) {
+        return res.status(400).send('Cannot find user')
+    }
+    try {
+        if (await bcrypt.compare(req.body.post.password, user.password)) {
+            const userEmail = req.body.post.email
+            const thisUser = { name : userEmail}
+            const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET)
+            res.json({accessToken : accessToken})
+            // res.send(JSON.stringify(user));
+        }
+        else {
+            res.send('Not Allowed')
+        }
+    } catch (error) {
+        res.status(500).send()
+    }
+
 })
 
-app.get('/userlogin', (req, res) => {
-    res.send(currentUser);
+app.get('/userlogin',authenticateToken, async (req, res) => {
+    res.send(user)
 })
 
-app.post('/userprofile', (req, res) => {
+app.post('/userprofile', authenticateToken, (req, res) => {
     // if (checkUser(req.body)) {
     //     const userIndex = checkUser(req.body);
     //     allUsers[userIndex] = { ...allUsers[userIndex], ...req.body.post }
@@ -326,7 +256,7 @@ app.post('/pet_admin_edit', (req, res) => {
     res.send('yes');
 })
 
-app.get('/images/:id', (req, res) => {
+app.get('/images/:id', async (req, res) => {
     const { id } = req.params;
     res.send(images[checkById(images, id)]);
 })
