@@ -15,7 +15,7 @@ const userCount = require('./public/UserCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
 const { addUser, addPet, checkLogin, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
-    onUserById, onPetById, onSearchByType, onAdvSearch } = require('./mongoFuncs')
+    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch } = require('./mongoFuncs');
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
@@ -24,7 +24,6 @@ app.use(cors());
 const storage = multer.diskStorage({
     destination: './images',
     filename: (req, file, cb) => {
-        console.log(req.params)
         const { id } = req.params
         cb(null, `${parseInt(id)}-${file.originalname}`);
     }
@@ -33,9 +32,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.use(express.static('images'));
 
-app.post('/image_upload/:id', upload.single('file'), (req, res, next) => {
-    const { id } = req.params
-    const { originalname } = req.file
+app.post('/image_upload/:id', authenticateToken, upload.single('file'), (req, res, next) => {
+    const { id } = req.params;
+    const { originalname } = req.file;
     const logObj = {
         'id': parseInt(id),
         "FileName": `${id}-${originalname}`,
@@ -70,7 +69,7 @@ app.post('/user_sign', async (req, res) => {
     fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
         if (err) console.log('Error here');
     })
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     allUsers.push({
         'id': userCount.length,
@@ -94,77 +93,66 @@ app.post('/user_sign', async (req, res) => {
     fs.writeFile('./public/UserCount.json', JSON.stringify(userCount, null, 2), (err, data) => {
         if (err) console.log('Error in UserCount');
     })
-    addUser(newUser).catch(console.dir);
-
-    res.send('Updated');
+    try {
+        const userEmail = req.body.post.email;
+        const thisUser = { name: userEmail };
+        const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
+        console.log(accessToken);
+        res.send({ accessToken: accessToken }).end();
+    } catch (error) {
+        res.status(500).send('500 status error');
+    }
+    addUser(newUser);
 })
 
-let user;
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
 
-function authenticateToken(req, res, next){
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-  if(token == null) return res.sendStatus(401)
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        console.log(user);
+        req.user = user;
+        next();
+    })
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) =>{
-      if(err)return res.sendStatus(403)
-      console.log(user)
-      req.user = user
-      next()
-  })
-    
 }
 
 app.post('/userlogin', async (req, res) => {
-    // if (checkUser(req.body)) {
-    //     fs.writeFile('./public/CurrentUser.json', JSON.stringify(allUsers[checkUser(req.body)], null, 2), (err, data) => {
-    //         if (err) console.log('Error in POST/userlogin');
-    //     })
-    // }
-    user = allUsers.find(user => user.email == req.body.post.email)
+    user = allUsers.find(user => user.email == req.body.post.email);
     if (user == null) {
-        return res.status(400).send('Cannot find user')
+        return res.status(400).send('Cannot find user');
     }
     try {
         if (await bcrypt.compare(req.body.post.password, user.password)) {
-            const userEmail = req.body.post.email
-            const thisUser = { name : userEmail}
-            const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET)
-            res.json({accessToken : accessToken})
-            // res.send(JSON.stringify(user));
+            const userEmail = req.body.post.email;
+            const thisUser = { name: userEmail };
+            const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
+            res.send({ accessToken: accessToken });
         }
         else {
-            res.send('Not Allowed')
+            res.send('Not Allowed');
         }
     } catch (error) {
-        res.status(500).send()
+        res.status(500).send();
     }
 
 })
 
-app.get('/userlogin',authenticateToken, async (req, res) => {
-    res.send(user)
+app.get('/userlogin', authenticateToken, async (req, res) => {
+    res.send(await getUserByEmail(req.user.name));
 })
 
 app.post('/userprofile', authenticateToken, (req, res) => {
-    // if (checkUser(req.body)) {
-    //     const userIndex = checkUser(req.body);
-    //     allUsers[userIndex] = { ...allUsers[userIndex], ...req.body.post }
-    //     fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
-    //         if (err) console.log('Error in POST /userprofile');
-    //     });
-    //     fs.writeFile('./public/CurrentUser.json', JSON.stringify(allUsers[userIndex], null, 2), (err, data) => {
-    //         if (err) console.log('Error in POST /userprofile');
-    //     });
-    // };
     updateUserProfile(req.body);
 })
 
-app.get('/all_users', async (req, res) => {
+app.get('/all_users', authenticateToken, async (req, res) => {
     res.send(await getAllUsers());
 })
 
-app.post('/pet_profile', (req, res) => {
+app.post('/pet_profile', authenticateToken, (req, res) => {
     petCount.push({
         'b': 'b'
     })
@@ -220,11 +208,11 @@ app.post('/pet_profile', (req, res) => {
     res.send('Updated');
 })
 
-app.get('/allpets', async (req, res) => {
+app.get('/allpets', authenticateToken, async (req, res) => {
     res.send(await getAllPets());
 })
 
-app.get('/users/:id', async (req, res) => {
+app.get('/users/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     res.send(await onUserById(id));
 })
@@ -233,9 +221,9 @@ app.get('/pets/:id', async (req, res) => {
     res.send(await onPetById(id));
 })
 
-app.post('/user_admin_edit', (req, res) => {
+app.post('/user_admin_edit', authenticateToken, (req, res) => {
     const { id } = req.body.post;
-    allUsers[checkById(allUsers, id)] = { ...allUsers[checkById(allUsers, req.id)], ...req.body.post }
+    allUsers[checkById(allUsers, id)] = { ...allUsers[checkById(allUsers, req.id)], ...req.body.post };
     fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
         if (err) console.log('Error in POST /userprofile');
     });
@@ -246,7 +234,7 @@ app.post('/user_admin_edit', (req, res) => {
     res.send('yes');
 })
 
-app.post('/pet_admin_edit', (req, res) => {
+app.post('/pet_admin_edit', authenticateToken, (req, res) => {
     const { id } = req.body.post;
     allPets[checkById(allPets, id)] = { ...allPets[checkById(allPets, req.id)], ...req.body.post }
     fs.writeFile('./public/AllPets.json', JSON.stringify(allPets, null, 2), (err, data) => {
@@ -256,21 +244,21 @@ app.post('/pet_admin_edit', (req, res) => {
     res.send('yes');
 })
 
-app.get('/images/:id', async (req, res) => {
+app.get('/images/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     res.send(images[checkById(images, id)]);
 })
-app.get('/pet_id/:name/type/:type', (req, res) => {
+app.get('/pet_id/:name/type/:type', authenticateToken, (req, res) => {
     const { name, type } = req.params;
     res.send(`${allPets[getIdByParams(allPets, name, type)].id}`);
 })
 
-app.get('/search_type/:type', async (req, res) => {
+app.get('/search_type/:type', authenticateToken, async (req, res) => {
     const { type } = req.params;
     res.send(await onSearchByType(type));
 })
 
-app.get('/adv_search', async (req, res) => {
+app.get('/adv_search', authenticateToken, async (req, res) => {
     const { status, height, weight, type, name } = req.query;
     res.send(await onAdvSearch(status, height, weight, type, name));
 })

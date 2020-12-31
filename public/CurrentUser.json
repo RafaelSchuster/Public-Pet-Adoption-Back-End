@@ -1,9 +1,7 @@
 {
-  "id": "50",
-  "petsOwned": [
-    "2",
-    "3",
-    "4"
-  ],
-  "bio": "ssss"
+  "firstName": "rf",
+  "lastName": "rf",
+  "telephone": "3",
+  "email": "rf@rf",
+  "password": "rfrf"
 }
