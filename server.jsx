@@ -15,7 +15,7 @@ const userCount = require('./public/UserCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
 const { addUser, addPet, checkLogin, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
-    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch } = require('./mongoFuncs');
+    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus, updateOwnerStatus } = require('./mongoFuncs');
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
@@ -112,7 +112,6 @@ function authenticateToken(req, res, next) {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403);
-        console.log(user);
         req.user = user;
         next();
     })
@@ -253,15 +252,24 @@ app.get('/pet_id/:name/type/:type', authenticateToken, (req, res) => {
     res.send(`${allPets[getIdByParams(allPets, name, type)].id}`);
 })
 
-app.get('/search_type/:type', authenticateToken, async (req, res) => {
+app.get('/search_type/:type', async (req, res) => {
     const { type } = req.params;
     res.send(await onSearchByType(type));
 })
 
-app.get('/adv_search', authenticateToken, async (req, res) => {
+app.get('/adv_search', async (req, res) => {
     const { status, height, weight, type, name } = req.query;
     res.send(await onAdvSearch(status, height, weight, type, name));
 })
+
+app.post('/pet_status/:id/update/:status', authenticateToken, async (req, res) => {
+    const { id, status } = req.params;
+    const { userEmail } = req.body;
+    updateOwnerStatus(userEmail, id, status);
+    res.send(updatePetStatus(id, status));
+})
+
+
 
 app.listen(port, () => {
     console.log('Running on Port 5000');

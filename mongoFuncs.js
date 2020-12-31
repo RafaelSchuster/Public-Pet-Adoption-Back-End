@@ -70,6 +70,7 @@ const updateUserProfile = async (userData) => {
 }
 
 const updatePetProfile = async (petData) => {
+    console.log(petData)
     const {
         id,
         type,
@@ -171,6 +172,58 @@ const onAdvSearch = async (status, height, weight, type, name) => {
     return petAdvSearch;
 }
 
+const updatePetStatus = async (id, petStatus) => {
+    const db = client.db(dbName);
+    const col = db.collection('allPets');
+    updatingPetStatus = await col.updateOne({
+        id: parseInt(id)
+    }, {
+        $set: {
+            petStatus: petStatus,
+        }
+    });
+    return updatingPetStatus;
+}
+
+const updateOwnerStatus = async (userEmail, petId, status) => {
+    if (status == 'adopted' || status == 'fostered') {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        findUser = await col.findOne({
+            email: userEmail
+        })
+        let newPetsLog = [];
+        if (findUser.petsOwned) newPetsLog = findUser.petsOwned;
+        newPetsLog.push(petId);
+        updatingUser = await col.updateOne({
+            email: userEmail
+        }, {
+            $set: {
+                petsOwned: newPetsLog
+            }
+        });
+    } else if (status == 'available') {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        findUser = await col.findOne({
+            email: userEmail
+        })
+        let newPetsLog = findUser.petsOwned
+        if (newPetsLog) {
+            newPetsLog = newPetsLog.filter(pet => pet != petId);
+            updatingUser = await col.updateOne({
+                email: userEmail
+            }, {
+                $set: {
+                    petsOwned: newPetsLog
+                }
+            });
+        };
+
+    }
+
+}
+
 exports.addUser = addUser;
 exports.addPet = addPet;
 exports.checkLogin = checkLogin;
@@ -183,3 +236,5 @@ exports.onPetById = onPetById;
 exports.onSearchByType = onSearchByType;
 exports.onAdvSearch = onAdvSearch;
 exports.getUserByEmail = getUserByEmail;
+exports.updatePetStatus = updatePetStatus;
+exports.updateOwnerStatus = updateOwnerStatus;

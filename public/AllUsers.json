@@ -302,5 +302,15 @@
     "telephone": "3",
     "email": "rf@rf",
     "password": "$2b$10$wC88WUhOSRfJbMJ8RhqkDulEsxOvv9ChPooGOTwcCcgEjjdkxnoxC"
+  },
+  {
+    "id": "29",
+    "firstName": "dv",
+    "lastName": "dv",
+    "telephone": "4",
+    "email": "dv@dv",
+    "petsOwned": [
+      "3"
+    ]
   }
 ]
