@@ -221,9 +221,48 @@ const updateOwnerStatus = async (userEmail, petId, status) => {
         };
 
     }
-
 }
 
+const savePet = async (userId, petId) => {
+    const db = client.db(dbName);
+    const col = db.collection('allUsers');
+    findUser = await col.findOne({
+        id: parseInt(userId)
+    })
+    let newSavedPetsLog = [];
+    if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
+    if (!newSavedPetsLog.includes(petId)) newSavedPetsLog.push(petId);
+    updatingUser = await col.updateOne({
+        id: parseInt(userId)
+    }, {
+        $set: {
+            petsSaved: newSavedPetsLog
+        }
+    });
+    return newSavedPetsLog;
+}
+
+const unSavePet = async (userId, petId) => {
+    const db = client.db(dbName);
+    const col = db.collection('allUsers');
+    findUser = await col.findOne({
+        id: parseInt(userId)
+    })
+    let newSavedPetsLog = [];
+    if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
+    newSavedPetsLog = newSavedPetsLog.filter(pet => pet != petId);
+    updatingUser = await col.updateOne({
+        id: parseInt(userId)
+    }, {
+        $set: {
+            petsSaved: newSavedPetsLog
+        }
+    });
+    return newSavedPetsLog;
+}
+
+exports.unSavePet = unSavePet;
+exports.savePet = savePet;
 exports.addUser = addUser;
 exports.addPet = addPet;
 exports.checkLogin = checkLogin;

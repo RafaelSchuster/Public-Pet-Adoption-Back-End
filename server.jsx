@@ -15,7 +15,7 @@ const userCount = require('./public/UserCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
 const { addUser, addPet, checkLogin, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
-    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus, updateOwnerStatus } = require('./mongoFuncs');
+    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus, updateOwnerStatus, savePet, unSavePet } = require('./mongoFuncs');
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
@@ -243,11 +243,11 @@ app.post('/pet_admin_edit', authenticateToken, (req, res) => {
     res.send('yes');
 })
 
-app.get('/images/:id', authenticateToken, async (req, res) => {
+app.get('/images/:id', async (req, res) => {
     const { id } = req.params;
     res.send(images[checkById(images, id)]);
 })
-app.get('/pet_id/:name/type/:type', authenticateToken, (req, res) => {
+app.get('/pet_id/:name/type/:type', (req, res) => {
     const { name, type } = req.params;
     res.send(`${allPets[getIdByParams(allPets, name, type)].id}`);
 })
@@ -269,6 +269,15 @@ app.post('/pet_status/:id/update/:status', authenticateToken, async (req, res) =
     res.send(updatePetStatus(id, status));
 })
 
+app.post(`/save_pet/user/:userId/pet/:petId`, authenticateToken, async (req, res) => {
+    const { userId, petId } = req.params
+    res.send(await savePet(userId, petId))
+})
+
+app.delete(`/save_pet/user/:userId/pet/:petId`, authenticateToken, async (req, res) => {
+    const { userId, petId } = req.params;
+    res.send(await unSavePet(userId, petId));
+})
 
 
 app.listen(port, () => {
