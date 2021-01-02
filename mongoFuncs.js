@@ -133,10 +133,11 @@ const onUserById = async (id) => {
 const getUserByEmail = async (email) => {
     const db = client.db(dbName);
     const col = db.collection('allUsers');
-    userByEMail = await col.findOne({
+    userByEmail = await col.findOne({
         email: email
     });
-    return userByEMail;
+    console.log(userByEmail)
+    return userByEmail;
 }
 
 const onPetById = async (id) => {
@@ -149,27 +150,46 @@ const onPetById = async (id) => {
 }
 
 const onSearchByType = async (type) => {
-    const petByTypeArr = [];
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    petByType = await col.find({
-        type: type
-    }).toArray();
-    petByType.forEach(pet => petByTypeArr.push(pet));
-    return petByTypeArr;
+    if (type != 'undefined') {
+        const petByTypeArr = [];
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        petByType = await col.find({
+            type: type
+        }).toArray();
+        petByType.forEach(pet => petByTypeArr.push(pet));
+        return petByTypeArr;
+    }
+    if (type == 'undefined') {
+        const petByTypeArr = [];
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        petByType = await col.find({}).toArray();
+        petByType.forEach(pet => petByTypeArr.push(pet));
+        return petByTypeArr;
+    }
 }
 
 const onAdvSearch = async (status, height, weight, type, name) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    petAdvSearch = await col.findOne({
-        type: type,
-        height: height,
-        petStatus: status,
-        weight: weight,
-        name: name
-    });
-    return petAdvSearch;
+    try {
+        let resultsArr = [];
+        let filterObj = {};
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        if (status != 'undefined' && status != '' ) filterObj.petStatus = status;
+        if (height != 'undefined' && height != '') filterObj.height = height;
+        if (weight != 'undefined' && weight != '') filterObj.weight = weight;
+        if (type != 'undefined' && type != '') filterObj.type = type;
+        if (name != 'undefined' && name != '') filterObj.name = name;
+        petAdvSearch = await col.find(filterObj).toArray();
+        petAdvSearch.forEach(entry => {
+            resultsArr.push(entry);
+        })
+        return resultsArr;
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 const updatePetStatus = async (id, petStatus) => {

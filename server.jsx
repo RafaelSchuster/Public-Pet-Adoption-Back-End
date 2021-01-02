@@ -254,6 +254,7 @@ app.get('/pet_id/:name/type/:type', (req, res) => {
 
 app.get('/search_type/:type', async (req, res) => {
     const { type } = req.params;
+    console.log(type)
     res.send(await onSearchByType(type));
 })
 
