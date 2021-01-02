@@ -176,7 +176,7 @@ const onAdvSearch = async (status, height, weight, type, name) => {
         let filterObj = {};
         const db = client.db(dbName);
         const col = db.collection('allPets');
-        if (status != 'undefined' && status != '' ) filterObj.petStatus = status;
+        if (status != 'undefined' && status != '') filterObj.petStatus = status;
         if (height != 'undefined' && height != '') filterObj.height = height;
         if (weight != 'undefined' && weight != '') filterObj.weight = weight;
         if (type != 'undefined' && type != '') filterObj.type = type;
@@ -189,7 +189,6 @@ const onAdvSearch = async (status, height, weight, type, name) => {
     } catch (error) {
         console.log(error);
     }
-
 }
 
 const updatePetStatus = async (id, petStatus) => {
