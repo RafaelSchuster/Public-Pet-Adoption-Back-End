@@ -9,14 +9,15 @@ const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
 const allUsers = require('./public/AllUsers.json');
-const currentUser = require('./public/CurrentUser.json');
+const allAdmin = require('./public/AllAdmin.json');
 const allPets = require('./public/AllPets.json');
 const userCount = require('./public/UserCount.json');
+const adminCount = require('./public/AdminCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
 const { addUser, addPet, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
     onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus,
-    updateOwnerStatus, savePet, unSavePet,checkDupes } = require('./mongoFuncs');
+    updateOwnerStatus, savePet, unSavePet, checkDupes, getAdminByEmail, checkAdminDupes, addAdmin } = require('./mongoFuncs');
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
@@ -72,6 +73,7 @@ app.post('/user_sign', async (req, res) => {
 
     allUsers.push({
         'id': userCount.length,
+        'admin': false,
         'firstName': firstName,
         'lastName': lastName,
         'telephone': telephone,
@@ -80,6 +82,7 @@ app.post('/user_sign', async (req, res) => {
     })
     const newUser = {
         id: userCount.length,
+        admin: false,
         firstName: firstName,
         lastName: lastName,
         telephone: telephone,
@@ -104,9 +107,66 @@ app.post('/user_sign', async (req, res) => {
     addUser(newUser)
 })
 
-app.get('/checkdupes/:email', async (req, res)=>{
-    const{email} = req.params;
+app.post('/admin_sign', async (req, res) => {
+    adminCount.push({
+        'a': 'a'
+    })
+    const {
+        firstName,
+        lastName,
+        telephone,
+        email,
+        password
+
+    } = req.body.post
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newAdmin = {
+        id: adminCount.length,
+        admin: true,
+        firstName: firstName,
+        lastName: lastName,
+        telephone: telephone,
+        email: email,
+        password: hashedPassword
+    }
+    allAdmin.push({
+        'id': adminCount.length,
+        'admin': true,
+        'firstName': firstName,
+        'lastName': lastName,
+        'telephone': telephone,
+        'email': email,
+        'password': hashedPassword
+    })
+
+    fs.writeFile('./public/AllAdmin.json', JSON.stringify(allAdmin, null, 2), (err, data) => {
+        if (err) console.log('Error Admin Sign');
+    })
+    fs.writeFile('./public/AdminCount.json', JSON.stringify(adminCount, null, 2), (err, data) => {
+        if (err) console.log('Error Admin Sign');
+    })
+    try {
+        const adminEmail = req.body.post.email;
+        const thisAdmin = { name: adminEmail };
+        const accessToken = jwt.sign(thisAdmin, process.env.ACCESS_TOKEN_SECRET);
+        console.log(accessToken);
+        res.send({ accessToken: accessToken })
+    } catch (error) {
+        res.status(500).send('500 status error Admin Sign');
+    }
+    addAdmin(newAdmin)
+})
+
+app.get('/checkdupes/:email', async (req, res) => {
+    const { email } = req.params;
     res.send(await checkDupes(email));
+})
+
+app.get('/checkdupes/admin/:email', async (req, res) => {
+    const { email } = req.params;
+    res.send(await checkAdminDupes(email));
 })
 
 function authenticateToken(req, res, next) {
@@ -140,8 +200,33 @@ app.post('/userlogin', async (req, res) => {
     }
 })
 
+app.post('/adminlogin', async (req, res) => {
+    admin = allAdmin.find(admin => admin.email == req.body.post.email);
+    if (admin == null) {
+        return res.status(400).send('Cannot find user');
+    }
+    try {
+        if (await bcrypt.compare(req.body.post.password, admin.password)) {
+            const adminEmail = req.body.post.email;
+            const thisAdmin = { name: adminEmail };
+            const accessToken = jwt.sign(thisAdmin, process.env.ACCESS_TOKEN_SECRET);
+            res.send({ accessToken: accessToken });
+        }
+        else {
+            res.send('Not Allowed');
+        }
+    } catch (error) {
+        res.status(500).send();
+    }
+})
+
 app.get('/userlogin', authenticateToken, async (req, res) => {
     res.send(await getUserByEmail(req.user.name));
+})
+
+app.get('/adminlogin', authenticateToken, async (req, res) => {
+    console.log(req.user.name)
+    res.send(await getAdminByEmail(req.user.name));
 })
 
 app.post('/userprofile', authenticateToken, (req, res) => {

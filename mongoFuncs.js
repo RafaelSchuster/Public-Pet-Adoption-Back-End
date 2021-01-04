@@ -27,6 +27,16 @@ const addUser = async (newUser) => {
     }
 }
 
+const addAdmin = async (newAdmin) => {
+    console.log(newAdmin)
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allAdmin');
+        newAdmins = await col.insertOne(newAdmin);
+    } catch (error) {
+        console.log(error);
+    }
+}
 const addPet = async (newPet) => {
     try {
         const db = client.db(dbName);
@@ -120,6 +130,20 @@ const checkDupes = async (email) => {
         console.log(error);
     }
 }
+const checkAdminDupes = async (email) => {
+    try {
+        let arrDupes = [];
+        const db = client.db(dbName);
+        const col = db.collection('allAdmin');
+        dupes = await col.find({
+            email: email
+        }).toArray();
+        dupes.forEach(dupe => arrDupes.push(dupe));
+        return arrDupes;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const getAllUsers = async () => {
     try {
@@ -172,6 +196,20 @@ const getUserByEmail = async (email) => {
         });
         if (userByEmail) userByEmail.password = ''
         return userByEmail;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getAdminByEmail = async (email) => {
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allAdmin');
+        adminByEmail = await col.findOne({
+            email: email
+        });
+        if (adminByEmail) adminByEmail.password = ''
+        return adminByEmail;
     } catch (error) {
         console.log(error);
     }
@@ -340,6 +378,9 @@ const unSavePet = async (userId, petId) => {
     }
 }
 
+exports.checkAdminDupes = checkAdminDupes;
+exports.addAdmin = addAdmin;
+exports.getAdminByEmail = getAdminByEmail;
 exports.checkDupes = checkDupes;
 exports.unSavePet = unSavePet;
 exports.savePet = savePet;

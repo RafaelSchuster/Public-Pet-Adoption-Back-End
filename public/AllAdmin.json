@@ -1,0 +1,71 @@
+[
+  {
+    "id": 1,
+    "firstName": "aa",
+    "lastName": "aa",
+    "telephone": "1",
+    "email": "aa@aa",
+    "password": "$2b$10$339DxmiUBsAv84XZhe.KDuhKeywG4tYKDVSrnswWGVyRpKMzgefAC"
+  },
+  {
+    "id": 2,
+    "firstName": "bb ",
+    "lastName": "bb",
+    "telephone": "1",
+    "email": "bb@bb",
+    "password": "$2b$10$7o54l.mtG5gRVX4GEdYUBOadqnHWQvbDHEv.SwHX6Q0tCQrm0lAx2"
+  },
+  {
+    "id": 3,
+    "firstName": "cc",
+    "lastName": "cc",
+    "telephone": "1",
+    "email": "cc@cc",
+    "password": "$2b$10$W3GlEHVCOUcM.rJf9mHPPOTA2vf78rjbG3.LAnxgkoYMDjpXDCo/m"
+  },
+  {
+    "id": 4,
+    "admin": true,
+    "firstName": "aa",
+    "lastName": "aa",
+    "telephone": "1",
+    "email": "aa@aa",
+    "password": "$2b$10$nxkjrAunJvVIRFY1cu4t5uqms4aKOED5LvHtCfoGJrudf9x5Ob7KG"
+  },
+  {
+    "id": 5,
+    "admin": true,
+    "firstName": "bb",
+    "lastName": "bb",
+    "telephone": "1",
+    "email": "bb@bb",
+    "password": "$2b$10$EgwVH2oAD2FmpF5QW9Z9Xux46Mii0q343rTffGnXE/ye1vBJi3JIi"
+  },
+  {
+    "id": 6,
+    "admin": true,
+    "firstName": "cc",
+    "lastName": "cc",
+    "telephone": "1",
+    "email": "cc@cc",
+    "password": "$2b$10$J//IOlr0OpdZjTC9c6yQduNpwn0piPkUt7F1MwNv4vS5ozBE/oTu."
+  },
+  {
+    "id": 7,
+    "admin": true,
+    "firstName": "dd",
+    "lastName": "dd",
+    "telephone": "1",
+    "email": "dd@dd",
+    "password": "$2b$10$ftZwW6iMiEJ6W1wk2t8rKu/GP8dBMf4NpRWOZR.12bE6rH4f5v/1W"
+  },
+  {
+    "id": 8,
+    "admin": true,
+    "firstName": "ee",
+    "lastName": "ee",
+    "telephone": "1",
+    "email": "ee@ee",
+    "password": "$2b$10$LQDFZ/8DPkoXwIc7CFy4guzMmakbWtKEEcOIoTdt19jtowPbJBOdO"
+  }
+]

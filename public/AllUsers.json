@@ -542,5 +542,56 @@
     "telephone": "1",
     "email": "v@v",
     "password": "$2b$10$147/1SFZWIbNP07UFUbCS./WNYCFVGOSPWR9502w81y0ym1Hluzli"
+  },
+  {
+    "id": 70,
+    "firstName": "x",
+    "lastName": "x",
+    "telephone": "1",
+    "email": "x@x",
+    "password": "$2b$10$OxU0vnndbqU4pbLfEkN0seoZL/a8NaQFngDIIthxvI5zWNaF1v/sW"
+  },
+  {
+    "id": 71,
+    "firstName": "z",
+    "lastName": "z",
+    "telephone": "1",
+    "email": "z@z",
+    "password": "$2b$10$2VS8/W7TfqyNSb2bMroVH.suR8spGa2JqmknOu1z4BZ439vmwN4h2"
+  },
+  {
+    "id": 72,
+    "firstName": "qa",
+    "lastName": "qa",
+    "telephone": "1",
+    "email": "qa@qa",
+    "password": "$2b$10$d2DJOqra8YPhLdt7JhRb6e9dtRjpToPHMFIYn9PbosYq7Xr7mRDru"
+  },
+  {
+    "id": 73,
+    "admin": false,
+    "firstName": "ws",
+    "lastName": "ws",
+    "telephone": "1",
+    "email": "ws@ws",
+    "password": "$2b$10$dYfGkKZ/5WXgOV0A4xkGHu/qL20pPc.j8uN2mjekZYAJSiraIU/0."
+  },
+  {
+    "id": 74,
+    "admin": false,
+    "firstName": "ed",
+    "lastName": "ed",
+    "telephone": "1",
+    "email": "ed@ed",
+    "password": "$2b$10$RVPG/RnfO1nzNvK4De0r6.uLmx3mxIlu65AVSSuHLuyjH7vT.4ONK"
+  },
+  {
+    "id": 75,
+    "admin": false,
+    "firstName": "rf",
+    "lastName": "rf",
+    "telephone": "1",
+    "email": "rf@rf",
+    "password": "$2b$10$oTisQWH3NyieuBRkwvta9eTDVeQXvIPG710nL0Pb1EVPI0/mQgpcK"
   }
 ]
