@@ -16,157 +16,202 @@ client.connect().then(res => {
     }
 })
 
+
 const addUser = async (newUser) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    newUsers = await col.insertOne(newUser);
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        newUsers = await col.insertOne(newUser);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const addPet = async (newPet) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    newPets = await col.insertOne(newPet);
-}
-
-const checkLogin = async (userData) => {
-    const {
-        email,
-        password
-    } = userData.post;
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    handleLogin = await col.findOne({
-        email: email,
-        password: password
-    });
-    return handleLogin;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        newPets = await col.insertOne(newPet);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const updateUserProfile = async (userData) => {
-    const {
-        id,
-        firstName,
-        lastName,
-        telephone,
-        email,
-        petsOwned,
-        bio
-    } = userData;
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    updatingUser = await col.updateOne({
-        id: parseInt(id)
-    }, {
-        $set: {
-            id: parseInt(id),
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            telephone: telephone,
-            petsOwned: petsOwned,
-            bio: bio
-        }
-    });
+    try {
+        const {
+            id,
+            firstName,
+            lastName,
+            telephone,
+            email,
+            petsOwned,
+            bio
+        } = userData;
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        updatingUser = await col.updateOne({
+            id: parseInt(id)
+        }, {
+            $set: {
+                id: parseInt(id),
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                telephone: telephone,
+                petsOwned: petsOwned,
+                bio: bio
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const updatePetProfile = async (petData) => {
-    console.log(petData)
-    const {
-        id,
-        type,
-        name,
-        breed,
-        color,
-        height,
-        weight,
-        petStatus,
-        hypoalergenic,
-        dietRestrictions,
-        petBio
-    } = petData;
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    updatingPet = await col.updateOne({
-        id: parseInt(id)
-    }, {
-        $set: {
-            name: name,
-            type: type,
-            breed: breed,
-            color: color,
-            height: height,
-            weight: weight,
-            petStatus: petStatus,
-            hypoalergenic: hypoalergenic,
-            dietRestrictions: dietRestrictions,
-            petBio: petBio
-        }
-    });
+    try {
+        const {
+            id,
+            type,
+            name,
+            breed,
+            color,
+            height,
+            weight,
+            petStatus,
+            hypoalergenic,
+            dietRestrictions,
+            petBio
+        } = petData;
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        updatingPet = await col.updateOne({
+            id: parseInt(id)
+        }, {
+            $set: {
+                name: name,
+                type: type,
+                breed: breed,
+                color: color,
+                height: height,
+                weight: weight,
+                petStatus: petStatus,
+                hypoalergenic: hypoalergenic,
+                dietRestrictions: dietRestrictions,
+                petBio: petBio
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const checkDupes = async (email) => {
+    try {
+        let arrDupes = [];
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        dupes = await col.find({
+            email: email
+        }).toArray();
+        dupes.forEach(dupe => arrDupes.push(dupe));
+        return arrDupes;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const getAllUsers = async () => {
-    const usersArr = [];
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    onGetAllUsers = await col.find({}).toArray();
-    onGetAllUsers.forEach(el => usersArr.push(el));
-    return usersArr;
+    try {
+        const usersArr = [];
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        onGetAllUsers = await col.find({}).toArray();
+        onGetAllUsers.forEach(el => usersArr.push(el));
+        for (let i = 0; i < usersArr.length; i++) {
+            usersArr[i].password = '';
+        }
+        return usersArr;
+    } catch (error) {
+        console.log('Get All Users Error');
+    }
 }
 
 const getAllPets = async () => {
-    const petsArr = [];
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    onGetAllPets = await col.find({}).toArray();
-    onGetAllPets.forEach(el => petsArr.push(el));
-    return petsArr;
+    try {
+        const petsArr = [];
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        onGetAllPets = await col.find({}).toArray();
+        onGetAllPets.forEach(el => petsArr.push(el));
+        return petsArr;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const onUserById = async (id) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    userById = await col.findOne({
-        id: parseInt(id)
-    });
-    return userById;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        userById = await col.findOne({
+            id: parseInt(id)
+        });
+        if (userById) userById.password = ''
+        return userById;
+    } catch (error) {
+        console.log(error);
+    }
 }
 const getUserByEmail = async (email) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    userByEmail = await col.findOne({
-        email: email
-    });
-    console.log(userByEmail)
-    return userByEmail;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        userByEmail = await col.findOne({
+            email: email
+        });
+        if (userByEmail) userByEmail.password = ''
+        return userByEmail;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const onPetById = async (id) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    petById = await col.findOne({
-        id: parseInt(id)
-    });
-    return petById;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        petById = await col.findOne({
+            id: parseInt(id)
+        });
+        return petById;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const onSearchByType = async (type) => {
-    if (type != 'undefined') {
-        const petByTypeArr = [];
-        const db = client.db(dbName);
-        const col = db.collection('allPets');
-        petByType = await col.find({
-            type: type
-        }).toArray();
-        petByType.forEach(pet => petByTypeArr.push(pet));
-        return petByTypeArr;
-    }
-    if (type == 'undefined') {
-        const petByTypeArr = [];
-        const db = client.db(dbName);
-        const col = db.collection('allPets');
-        petByType = await col.find({}).toArray();
-        petByType.forEach(pet => petByTypeArr.push(pet));
-        return petByTypeArr;
+    try {
+        if (type != 'undefined') {
+            const petByTypeArr = [];
+            const db = client.db(dbName);
+            const col = db.collection('allPets');
+            petByType = await col.find({
+                type: type
+            }).toArray();
+            petByType.forEach(pet => petByTypeArr.push(pet));
+            return petByTypeArr;
+        }
+        if (type == 'undefined') {
+            const petByTypeArr = [];
+            const db = client.db(dbName);
+            const col = db.collection('allPets');
+            petByType = await col.find({}).toArray();
+            petByType.forEach(pet => petByTypeArr.push(pet));
+            return petByTypeArr;
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -192,44 +237,33 @@ const onAdvSearch = async (status, height, weight, type, name) => {
 }
 
 const updatePetStatus = async (id, petStatus) => {
-    const db = client.db(dbName);
-    const col = db.collection('allPets');
-    updatingPetStatus = await col.updateOne({
-        id: parseInt(id)
-    }, {
-        $set: {
-            petStatus: petStatus,
-        }
-    });
-    return updatingPetStatus;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        updatingPetStatus = await col.updateOne({
+            id: parseInt(id)
+        }, {
+            $set: {
+                petStatus: petStatus,
+            }
+        });
+        return updatingPetStatus;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const updateOwnerStatus = async (userEmail, petId, status) => {
-    if (status == 'adopted' || status == 'fostered') {
-        const db = client.db(dbName);
-        const col = db.collection('allUsers');
-        findUser = await col.findOne({
-            email: userEmail
-        })
-        let newPetsLog = [];
-        if (findUser.petsOwned) newPetsLog = findUser.petsOwned;
-        newPetsLog.push(petId);
-        updatingUser = await col.updateOne({
-            email: userEmail
-        }, {
-            $set: {
-                petsOwned: newPetsLog
-            }
-        });
-    } else if (status == 'available') {
-        const db = client.db(dbName);
-        const col = db.collection('allUsers');
-        findUser = await col.findOne({
-            email: userEmail
-        })
-        let newPetsLog = findUser.petsOwned
-        if (newPetsLog) {
-            newPetsLog = newPetsLog.filter(pet => pet != petId);
+    try {
+        if (status == 'adopted' || status == 'fostered') {
+            const db = client.db(dbName);
+            const col = db.collection('allUsers');
+            findUser = await col.findOne({
+                email: userEmail
+            })
+            let newPetsLog = [];
+            if (findUser.petsOwned) newPetsLog = findUser.petsOwned;
+            newPetsLog.push(petId);
             updatingUser = await col.updateOne({
                 email: userEmail
             }, {
@@ -237,54 +271,80 @@ const updateOwnerStatus = async (userEmail, petId, status) => {
                     petsOwned: newPetsLog
                 }
             });
-        };
-
+        } else if (status == 'available') {
+            const db = client.db(dbName);
+            const col = db.collection('allUsers');
+            findUser = await col.findOne({
+                email: userEmail
+            })
+            let newPetsLog = findUser.petsOwned
+            if (newPetsLog) {
+                newPetsLog = newPetsLog.filter(pet => pet != petId);
+                updatingUser = await col.updateOne({
+                    email: userEmail
+                }, {
+                    $set: {
+                        petsOwned: newPetsLog
+                    }
+                });
+            };
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 
 const savePet = async (userId, petId) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    findUser = await col.findOne({
-        id: parseInt(userId)
-    })
-    let newSavedPetsLog = [];
-    if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
-    if (!newSavedPetsLog.includes(petId)) newSavedPetsLog.push(petId);
-    updatingUser = await col.updateOne({
-        id: parseInt(userId)
-    }, {
-        $set: {
-            petsSaved: newSavedPetsLog
-        }
-    });
-    return newSavedPetsLog;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        findUser = await col.findOne({
+            id: parseInt(userId)
+        })
+        let newSavedPetsLog = [];
+        if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
+        if (!newSavedPetsLog.includes(petId)) newSavedPetsLog.push(petId);
+        updatingUser = await col.updateOne({
+            id: parseInt(userId)
+        }, {
+            $set: {
+                petsSaved: newSavedPetsLog
+            }
+        });
+        return newSavedPetsLog;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const unSavePet = async (userId, petId) => {
-    const db = client.db(dbName);
-    const col = db.collection('allUsers');
-    findUser = await col.findOne({
-        id: parseInt(userId)
-    })
-    let newSavedPetsLog = [];
-    if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
-    newSavedPetsLog = newSavedPetsLog.filter(pet => pet != petId);
-    updatingUser = await col.updateOne({
-        id: parseInt(userId)
-    }, {
-        $set: {
-            petsSaved: newSavedPetsLog
-        }
-    });
-    return newSavedPetsLog;
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allUsers');
+        findUser = await col.findOne({
+            id: parseInt(userId)
+        })
+        let newSavedPetsLog = [];
+        if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
+        newSavedPetsLog = newSavedPetsLog.filter(pet => pet != petId);
+        updatingUser = await col.updateOne({
+            id: parseInt(userId)
+        }, {
+            $set: {
+                petsSaved: newSavedPetsLog
+            }
+        });
+        return newSavedPetsLog;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
+exports.checkDupes = checkDupes;
 exports.unSavePet = unSavePet;
 exports.savePet = savePet;
 exports.addUser = addUser;
 exports.addPet = addPet;
-exports.checkLogin = checkLogin;
 exports.updateUserProfile = updateUserProfile;
 exports.updatePetProfile = updatePetProfile;
 exports.getAllUsers = getAllUsers;

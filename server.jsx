@@ -14,8 +14,9 @@ const allPets = require('./public/AllPets.json');
 const userCount = require('./public/UserCount.json');
 const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
-const { addUser, addPet, checkLogin, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
-    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus, updateOwnerStatus, savePet, unSavePet } = require('./mongoFuncs');
+const { addUser, addPet, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
+    onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus,
+    updateOwnerStatus, savePet, unSavePet,checkDupes } = require('./mongoFuncs');
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
@@ -66,9 +67,7 @@ app.post('/user_sign', async (req, res) => {
         password
 
     } = req.body.post
-    fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
-        if (err) console.log('Error here');
-    })
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     allUsers.push({
@@ -98,24 +97,27 @@ app.post('/user_sign', async (req, res) => {
         const thisUser = { name: userEmail };
         const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
         console.log(accessToken);
-        res.send({ accessToken: accessToken }).end();
+        res.send({ accessToken: accessToken })
     } catch (error) {
         res.status(500).send('500 status error');
     }
-    addUser(newUser);
+    addUser(newUser)
+})
+
+app.get('/checkdupes/:email', async (req, res)=>{
+    const{email} = req.params;
+    res.send(await checkDupes(email));
 })
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (token == null) return res.sendStatus(401);
-
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403);
         req.user = user;
         next();
     })
-
 }
 
 app.post('/userlogin', async (req, res) => {
@@ -136,7 +138,6 @@ app.post('/userlogin', async (req, res) => {
     } catch (error) {
         res.status(500).send();
     }
-
 })
 
 app.get('/userlogin', authenticateToken, async (req, res) => {
@@ -254,7 +255,6 @@ app.get('/pet_id/:name/type/:type', (req, res) => {
 
 app.get('/search_type/:type', async (req, res) => {
     const { type } = req.params;
-    console.log(type)
     res.send(await onSearchByType(type));
 })
 
