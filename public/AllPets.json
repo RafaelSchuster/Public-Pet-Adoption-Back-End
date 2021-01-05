@@ -413,5 +413,18 @@
     "petBio": "ht",
     "petStatus": "adopted",
     "hypoalergenic": "Yes"
+  },
+  {
+    "id": "59",
+    "name": "ab",
+    "breed": "ahh",
+    "type": "a",
+    "color": "b",
+    "height": "1",
+    "weight": "1",
+    "petStatus": "adopted",
+    "hypoalergenic": "Yes",
+    "dietRestrictions": "b",
+    "petBio": "1"
   }
 ]

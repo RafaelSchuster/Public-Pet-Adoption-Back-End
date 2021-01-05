@@ -5,6 +5,7 @@ const app = express();
 const jwt = require('jsonwebtoken')
 const port = 5000;
 const multer = require('multer');
+const Joi = require('joi')
 const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
@@ -57,106 +58,142 @@ app.post('/image_upload/:id', authenticateToken, upload.single('file'), (req, re
 });
 
 app.post('/user_sign', async (req, res) => {
-    userCount.push({
-        'a': 'a'
+    const schema = Joi.object().keys({
+        firstName: Joi.string().regex(/^([^0-9]*)$/).trim().required(),
+        lastName: Joi.string().regex(/^([^0-9]*)$/).trim().required(),
+        telephone: Joi.number().integer().required(),
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().min(5).max(10).required()
+    });
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
     })
-    const {
-        firstName,
-        lastName,
-        telephone,
-        email,
-        password
-
-    } = req.body.post
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    allUsers.push({
-        'id': userCount.length,
-        'admin': false,
-        'firstName': firstName,
-        'lastName': lastName,
-        'telephone': telephone,
-        'email': email,
-        'password': hashedPassword
-    })
-    const newUser = {
-        id: userCount.length,
-        admin: false,
-        firstName: firstName,
-        lastName: lastName,
-        telephone: telephone,
-        email: email,
-        password: hashedPassword
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
     }
-    fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
-        if (err) console.log('Error here');
-    })
-    fs.writeFile('./public/UserCount.json', JSON.stringify(userCount, null, 2), (err, data) => {
-        if (err) console.log('Error in UserCount');
-    })
-    try {
-        const userEmail = req.body.post.email;
-        const thisUser = { name: userEmail };
-        const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
-        console.log(accessToken);
-        res.send({ accessToken: accessToken })
-    } catch (error) {
-        res.status(500).send('500 status error');
+    else {
+        userCount.push({
+            'a': 'a'
+        })
+        const {
+            firstName,
+            lastName,
+            telephone,
+            email,
+            password
+
+        } = req.body.post
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        allUsers.push({
+            'id': userCount.length,
+            'admin': false,
+            'firstName': firstName,
+            'lastName': lastName,
+            'telephone': telephone,
+            'email': email,
+            'password': hashedPassword
+        })
+        const newUser = {
+            id: userCount.length,
+            admin: false,
+            firstName: firstName,
+            lastName: lastName,
+            telephone: telephone,
+            email: email,
+            password: hashedPassword
+        }
+        fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
+            if (err) console.log('Error here');
+        })
+        fs.writeFile('./public/UserCount.json', JSON.stringify(userCount, null, 2), (err, data) => {
+            if (err) console.log('Error in UserCount');
+        })
+        try {
+            const userEmail = req.body.post.email;
+            const thisUser = { name: userEmail };
+            const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
+            console.log(accessToken);
+            res.send({ accessToken: accessToken });
+        } catch (error) {
+            res.status(500).send('500 status error');
+        }
+        addUser(newUser);
     }
-    addUser(newUser)
 })
 
 app.post('/admin_sign', async (req, res) => {
-    adminCount.push({
-        'a': 'a'
+    const schema = Joi.object().keys({
+        firstName: Joi.string().regex(/^([^0-9]*)$/).trim().required(),
+        lastName: Joi.string().regex(/^([^0-9]*)$/).trim().required(),
+        telephone: Joi.number().integer().required(),
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().min(5).max(10).required()
+    });
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
     })
-    const {
-        firstName,
-        lastName,
-        telephone,
-        email,
-        password
-
-    } = req.body.post
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newAdmin = {
-        id: adminCount.length,
-        admin: true,
-        firstName: firstName,
-        lastName: lastName,
-        telephone: telephone,
-        email: email,
-        password: hashedPassword
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
     }
-    allAdmin.push({
-        'id': adminCount.length,
-        'admin': true,
-        'firstName': firstName,
-        'lastName': lastName,
-        'telephone': telephone,
-        'email': email,
-        'password': hashedPassword
-    })
+    else {
+        adminCount.push({
+            'a': 'a'
+        })
+        const {
+            firstName,
+            lastName,
+            telephone,
+            email,
+            password
 
-    fs.writeFile('./public/AllAdmin.json', JSON.stringify(allAdmin, null, 2), (err, data) => {
-        if (err) console.log('Error Admin Sign');
-    })
-    fs.writeFile('./public/AdminCount.json', JSON.stringify(adminCount, null, 2), (err, data) => {
-        if (err) console.log('Error Admin Sign');
-    })
-    try {
-        const adminEmail = req.body.post.email;
-        const thisAdmin = { name: adminEmail };
-        const accessToken = jwt.sign(thisAdmin, process.env.ACCESS_TOKEN_SECRET);
-        console.log(accessToken);
-        res.send({ accessToken: accessToken })
-    } catch (error) {
-        res.status(500).send('500 status error Admin Sign');
+        } = req.body.post
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newAdmin = {
+            id: adminCount.length,
+            admin: true,
+            firstName: firstName,
+            lastName: lastName,
+            telephone: telephone,
+            email: email,
+            password: hashedPassword
+        }
+        allAdmin.push({
+            'id': adminCount.length,
+            'admin': true,
+            'firstName': firstName,
+            'lastName': lastName,
+            'telephone': telephone,
+            'email': email,
+            'password': hashedPassword
+        })
+
+        fs.writeFile('./public/AllAdmin.json', JSON.stringify(allAdmin, null, 2), (err, data) => {
+            if (err) console.log('Error Admin Sign');
+        })
+        fs.writeFile('./public/AdminCount.json', JSON.stringify(adminCount, null, 2), (err, data) => {
+            if (err) console.log('Error Admin Sign');
+        })
+        try {
+            const adminEmail = req.body.post.email;
+            const thisAdmin = { name: adminEmail };
+            const accessToken = jwt.sign(thisAdmin, process.env.ACCESS_TOKEN_SECRET);
+            console.log(accessToken);
+            res.send({ accessToken: accessToken });
+        } catch (error) {
+            res.status(500).send('500 status error Admin Sign');
+        }
+        addAdmin(newAdmin);
     }
-    addAdmin(newAdmin)
 })
 
 app.get('/checkdupes/:email', async (req, res) => {
@@ -181,42 +218,72 @@ function authenticateToken(req, res, next) {
 }
 
 app.post('/userlogin', async (req, res) => {
-    user = allUsers.find(user => user.email == req.body.post.email);
-    if (user == null) {
-        return res.status(400).send('Cannot find user');
+    const schema = Joi.object().keys({
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().min(5).max(10).required()
+    });
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
+    })
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
     }
-    try {
-        if (await bcrypt.compare(req.body.post.password, user.password)) {
-            const userEmail = req.body.post.email;
-            const thisUser = { name: userEmail };
-            const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
-            res.send({ accessToken: accessToken });
+    else {
+        user = allUsers.find(user => user.email == req.body.post.email);
+        if (user == null) {
+            return res.status(400).send('Cannot find user');
         }
-        else {
-            res.send('Not Allowed');
+        try {
+            if (await bcrypt.compare(req.body.post.password, user.password)) {
+                const userEmail = req.body.post.email;
+                const thisUser = { name: userEmail };
+                const accessToken = jwt.sign(thisUser, process.env.ACCESS_TOKEN_SECRET);
+                res.send({ accessToken: accessToken });
+            }
+            else {
+                res.send('Not Allowed');
+            }
+        } catch (error) {
+            res.status(500).send();
         }
-    } catch (error) {
-        res.status(500).send();
     }
 })
 
 app.post('/adminlogin', async (req, res) => {
-    admin = allAdmin.find(admin => admin.email == req.body.post.email);
-    if (admin == null) {
-        return res.status(400).send('Cannot find user');
+    const schema = Joi.object().keys({
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().min(5).max(10).required()
+    });
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
+    })
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
     }
-    try {
-        if (await bcrypt.compare(req.body.post.password, admin.password)) {
-            const adminEmail = req.body.post.email;
-            const thisAdmin = { name: adminEmail };
-            const accessToken = jwt.sign(thisAdmin, process.env.ACCESS_TOKEN_SECRET);
-            res.send({ accessToken: accessToken });
+    else {
+        admin = allAdmin.find(admin => admin.email == req.body.post.email);
+        if (admin == null) {
+            return res.status(400).send('Cannot find user');
         }
-        else {
-            res.send('Not Allowed');
+        try {
+            if (await bcrypt.compare(req.body.post.password, admin.password)) {
+                const adminEmail = req.body.post.email;
+                const thisAdmin = { name: adminEmail };
+                const accessToken = jwt.sign(thisAdmin, process.env.ACCESS_TOKEN_SECRET);
+                res.send({ accessToken: accessToken });
+            }
+            else {
+                res.send('Not Allowed');
+            }
+        } catch (error) {
+            res.status(500).send();
         }
-    } catch (error) {
-        res.status(500).send();
     }
 })
 
@@ -225,12 +292,31 @@ app.get('/userlogin', authenticateToken, async (req, res) => {
 })
 
 app.get('/adminlogin', authenticateToken, async (req, res) => {
-    console.log(req.user.name)
     res.send(await getAdminByEmail(req.user.name));
 })
 
-app.post('/userprofile', authenticateToken, (req, res) => {
-    updateUserProfile(req.body);
+app.post('/userprofile', authenticateToken, async (req, res) => {
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        firstName: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        lastName: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        telephone: Joi.number().integer(),
+        email: Joi.string().trim().email(),
+        password: Joi.string().min(5).max(10),
+        bio: Joi.string().max(140)
+    });
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
+    })
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
+    }
+    else {
+        updateUserProfile(req.body);
+    }
 })
 
 app.get('/all_users', authenticateToken, async (req, res) => {
@@ -238,59 +324,83 @@ app.get('/all_users', authenticateToken, async (req, res) => {
 })
 
 app.post('/pet_profile', authenticateToken, (req, res) => {
-    petCount.push({
-        'b': 'b'
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        type: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        name: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        breed: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        height: Joi.number().integer(),
+        weight: Joi.number().integer(),
+        color: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        dietRestrictions: Joi.string().trim(),
+        hypoalergenic: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        petStatus: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        petBio: Joi.string().max(140)
+    });
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
     })
-    const {
-        name,
-        type,
-        breed,
-        color,
-        height,
-        weight,
-        dietRestrictions,
-        petBio,
-        petStatus,
-        petsOwned,
-        hypoalergenic
-    } = req.body.post
-
-    allPets.push({
-        'id': petCount.length,
-        'name': name,
-        'type': type,
-        'breed': breed,
-        'color': color,
-        'height': height,
-        'weight': weight,
-        'dietRestrictions': dietRestrictions,
-        'petBio': petBio,
-        'petStatus': petStatus,
-        'petsOwned': petsOwned,
-        'hypoalergenic': hypoalergenic
-
-    })
-    const newPetProfile = {
-        id: petCount.length,
-        name: name,
-        type: type,
-        breed: breed,
-        color: color,
-        height: height,
-        weight: weight,
-        dietRestrictions: dietRestrictions,
-        petBio: petBio,
-        petStatus: petStatus,
-        hypoalergenic: hypoalergenic
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
     }
-    fs.writeFile('./public/AllPets.json', JSON.stringify(allPets, null, 2), (err, data) => {
-        if (err) console.log('Error here');
-    })
-    fs.writeFile('./public/PetCount.json', JSON.stringify(petCount, null, 2), (err, data) => {
-        if (err) console.log('Error in PetCount');
-    })
-    addPet(newPetProfile);
-    res.send('Updated');
+    else {
+        petCount.push({
+            'b': 'b'
+        })
+        const {
+            name,
+            type,
+            breed,
+            color,
+            height,
+            weight,
+            dietRestrictions,
+            petBio,
+            petStatus,
+            petsOwned,
+            hypoalergenic
+        } = req.body.post
+
+        allPets.push({
+            'id': petCount.length,
+            'name': name,
+            'type': type,
+            'breed': breed,
+            'color': color,
+            'height': height,
+            'weight': weight,
+            'dietRestrictions': dietRestrictions,
+            'petBio': petBio,
+            'petStatus': petStatus,
+            'petsOwned': petsOwned,
+            'hypoalergenic': hypoalergenic
+
+        })
+        const newPetProfile = {
+            id: petCount.length,
+            name: name,
+            type: type,
+            breed: breed,
+            color: color,
+            height: height,
+            weight: weight,
+            dietRestrictions: dietRestrictions,
+            petBio: petBio,
+            petStatus: petStatus,
+            hypoalergenic: hypoalergenic
+        }
+        fs.writeFile('./public/AllPets.json', JSON.stringify(allPets, null, 2), (err, data) => {
+            if (err) console.log('Error here');
+        })
+        fs.writeFile('./public/PetCount.json', JSON.stringify(petCount, null, 2), (err, data) => {
+            if (err) console.log('Error in PetCount');
+        })
+        addPet(newPetProfile);
+        res.send('Updated');
+    }
 })
 
 app.get('/allpets', authenticateToken, async (req, res) => {
@@ -307,26 +417,70 @@ app.get('/pets/:id', async (req, res) => {
 })
 
 app.post('/user_admin_edit', authenticateToken, (req, res) => {
-    const { id } = req.body.post;
-    allUsers[checkById(allUsers, id)] = { ...allUsers[checkById(allUsers, req.id)], ...req.body.post };
-    fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
-        if (err) console.log('Error in POST /userprofile');
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        firstName: Joi.string().regex(/^([^0-9]*)$/).trim().required(),
+        lastName: Joi.string().regex(/^([^0-9]*)$/).trim().required(),
+        telephone: Joi.number().integer().required(),
+        email: Joi.string().trim().email().required(),
+        petsOwned: Joi.array().items(Joi.number()),
+        bio: Joi.string().max(140)
     });
-    fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
-        if (err) console.log('Error here');
-    });
-    updateUserProfile(req.body.post);
-    res.send('yes');
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
+    })
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
+    }
+    else {
+        const { id } = req.body.post;
+        allUsers[checkById(allUsers, id)] = { ...allUsers[checkById(allUsers, req.id)], ...req.body.post };
+        fs.writeFile('./public/AllUsers.json', JSON.stringify(allUsers, null, 2), (err, data) => {
+            if (err) console.log('Error in POST /userprofile');
+        });
+        fs.writeFile('./public/CurrentUser.json', JSON.stringify(req.body.post, null, 2), (err, data) => {
+            if (err) console.log('Error here');
+        });
+        updateUserProfile(req.body.post);
+        res.send('yes');
+    }
 })
 
 app.post('/pet_admin_edit', authenticateToken, (req, res) => {
-    const { id } = req.body.post;
-    allPets[checkById(allPets, id)] = { ...allPets[checkById(allPets, req.id)], ...req.body.post }
-    fs.writeFile('./public/AllPets.json', JSON.stringify(allPets, null, 2), (err, data) => {
-        if (err) console.log('Error in POST /petprofile');
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        type: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        name: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        breed: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        height: Joi.number().integer(),
+        weight: Joi.number().integer(),
+        color: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        dietRestrictions: Joi.string().trim(),
+        hypoalergenic: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        petStatus: Joi.string().regex(/^([^0-9]*)$/).trim(),
+        petBio: Joi.string().max(140)
     });
-    updatePetProfile(req.body.post);
-    res.send('yes');
+    const validation = schema.validate(req.body.post, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err).end();
+        }
+    })
+    if (validation.error && validation.error.details[0].message) {
+        res.send(JSON.stringify(validation.error.details[0].message)).end();
+    }
+    else {
+        const { id } = req.body.post;
+        allPets[checkById(allPets, id)] = { ...allPets[checkById(allPets, req.id)], ...req.body.post }
+        fs.writeFile('./public/AllPets.json', JSON.stringify(allPets, null, 2), (err, data) => {
+            if (err) console.log('Error in POST /petprofile');
+        });
+        updatePetProfile(req.body.post);
+        res.send('yes');
+    }
 })
 
 app.get('/images/:id', async (req, res) => {
@@ -356,15 +510,14 @@ app.post('/pet_status/:id/update/:status', authenticateToken, async (req, res) =
 })
 
 app.post(`/save_pet/user/:userId/pet/:petId`, authenticateToken, async (req, res) => {
-    const { userId, petId } = req.params
-    res.send(await savePet(userId, petId))
+    const { userId, petId } = req.params;
+    res.send(await savePet(userId, petId));
 })
 
 app.delete(`/save_pet/user/:userId/pet/:petId`, authenticateToken, async (req, res) => {
     const { userId, petId } = req.params;
     res.send(await unSavePet(userId, petId));
 })
-
 
 app.listen(port, () => {
     console.log('Running on Port 5000');

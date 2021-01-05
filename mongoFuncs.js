@@ -48,6 +48,7 @@ const addPet = async (newPet) => {
 }
 
 const updateUserProfile = async (userData) => {
+    console.log(userData)
     try {
         const {
             id,
@@ -57,7 +58,7 @@ const updateUserProfile = async (userData) => {
             email,
             petsOwned,
             bio
-        } = userData;
+        } = userData.post;
         const db = client.db(dbName);
         const col = db.collection('allUsers');
         updatingUser = await col.updateOne({
@@ -73,6 +74,7 @@ const updateUserProfile = async (userData) => {
                 bio: bio
             }
         });
+        console.log('yes')
     } catch (error) {
         console.log(error);
     }

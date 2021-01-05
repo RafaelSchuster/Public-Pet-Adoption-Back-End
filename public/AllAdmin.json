@@ -67,5 +67,23 @@
     "telephone": "1",
     "email": "ee@ee",
     "password": "$2b$10$LQDFZ/8DPkoXwIc7CFy4guzMmakbWtKEEcOIoTdt19jtowPbJBOdO"
+  },
+  {
+    "id": 9,
+    "admin": true,
+    "firstName": "a",
+    "lastName": "a",
+    "telephone": "1",
+    "email": "aa@aa.com",
+    "password": "$2b$10$LHWkVWcHzLyJnV4Bks2/MOwQyQCAc67ev0cdFzAiVSU3y/wzkNjdq"
+  },
+  {
+    "id": 10,
+    "admin": true,
+    "firstName": "dd",
+    "lastName": "dd",
+    "telephone": "1",
+    "email": "dd@dd.com",
+    "password": "$2b$10$baZy8CWRVehTD.M4eT.MZ.fNlH3G.VMHHrMO4s5s33tMZ5e7YkOca"
   }
 ]
