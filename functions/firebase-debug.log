@@ -1,0 +1,94 @@
+[debug] [2021-01-06T14:28:29.060Z] ----------------------------------------------------------------------
+[debug] [2021-01-06T14:28:29.062Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-01-06T14:28:29.062Z] CLI Version:   8.17.0
+[debug] [2021-01-06T14:28:29.062Z] Platform:      win32
+[debug] [2021-01-06T14:28:29.062Z] Node Version:  v12.19.0
+[debug] [2021-01-06T14:28:29.063Z] Time:          Wed Jan 06 2021 16:28:29 GMT+0200 (Israel Standard Time)
+[debug] [2021-01-06T14:28:29.063Z] ----------------------------------------------------------------------
+[debug] [2021-01-06T14:28:29.063Z] 
+[debug] [2021-01-06T14:28:29.071Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-06T14:28:29.071Z] > authorizing via signed-in user
+[debug] [2021-01-06T14:28:29.071Z] [iam] checking project pet-project-backend-9c241 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-01-06T14:28:29.074Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-01-06T14:28:29.074Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-01-06T14:28:29.427Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","date":"Wed, 06 Jan 2021 14:28:32 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:28:29.432Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pet-project-backend-9c241:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2021-01-06T14:28:30.314Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 14:28:33 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=578","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:28:30.315Z] >>> HTTP REQUEST POST https://iam.googleapis.com/v1/projects/pet-project-backend-9c241/serviceAccounts/pet-project-backend-9c241@appspot.gserviceaccount.com:testIamPermissions  
+ {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2021-01-06T14:28:30.806Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 14:28:34 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:28:30.807Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/pet-project-backend-9c241  
+ 
+[debug] [2021-01-06T14:28:31.239Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 14:28:34 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:28:31.571Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at validateString (internal/validators.js:120:11)
+    at Object.join (path.js:375:7)
+    at Object.checkFunctionsSDKVersion [as fn] (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\checkFirebaseSDKVersion.js:34:28)
+    at Command.<anonymous> (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:170:30)
+    at Generator.next (<anonymous>)
+    at fulfilled (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2021-01-06T14:57:42.489Z] ----------------------------------------------------------------------
+[debug] [2021-01-06T14:57:42.491Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-01-06T14:57:42.491Z] CLI Version:   8.17.0
+[debug] [2021-01-06T14:57:42.491Z] Platform:      win32
+[debug] [2021-01-06T14:57:42.491Z] Node Version:  v12.19.0
+[debug] [2021-01-06T14:57:42.492Z] Time:          Wed Jan 06 2021 16:57:42 GMT+0200 (Israel Standard Time)
+[debug] [2021-01-06T14:57:42.492Z] ----------------------------------------------------------------------
+[debug] [2021-01-06T14:57:42.492Z] 
+[debug] [2021-01-06T14:57:42.499Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-06T14:57:42.499Z] > authorizing via signed-in user
+[debug] [2021-01-06T14:57:42.499Z] [iam] checking project pet-project-backend-9c241 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-01-06T14:57:42.502Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pet-project-backend-9c241:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2021-01-06T14:57:43.507Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 14:57:46 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=554","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:57:43.509Z] >>> HTTP REQUEST POST https://iam.googleapis.com/v1/projects/pet-project-backend-9c241/serviceAccounts/pet-project-backend-9c241@appspot.gserviceaccount.com:testIamPermissions  
+ {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2021-01-06T14:57:44.051Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 14:57:47 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:57:44.052Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/pet-project-backend-9c241  
+ 
+[debug] [2021-01-06T14:57:44.473Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 14:57:47 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T14:57:44.774Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at validateString (internal/validators.js:120:11)
+    at Object.join (path.js:375:7)
+    at Object.checkFunctionsSDKVersion [as fn] (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\checkFirebaseSDKVersion.js:34:28)
+    at Command.<anonymous> (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:170:30)
+    at Generator.next (<anonymous>)
+    at fulfilled (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2021-01-06T15:53:48.332Z] ----------------------------------------------------------------------
+[debug] [2021-01-06T15:53:48.333Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-01-06T15:53:48.334Z] CLI Version:   8.17.0
+[debug] [2021-01-06T15:53:48.334Z] Platform:      win32
+[debug] [2021-01-06T15:53:48.334Z] Node Version:  v12.19.0
+[debug] [2021-01-06T15:53:48.334Z] Time:          Wed Jan 06 2021 17:53:48 GMT+0200 (Israel Standard Time)
+[debug] [2021-01-06T15:53:48.334Z] ----------------------------------------------------------------------
+[debug] [2021-01-06T15:53:48.335Z] 
+[debug] [2021-01-06T15:53:48.341Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-06T15:53:48.341Z] > authorizing via signed-in user
+[debug] [2021-01-06T15:53:48.342Z] [iam] checking project pet-project-backend-9c241 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-01-06T15:53:48.344Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pet-project-backend-9c241:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2021-01-06T15:53:49.219Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 15:53:52 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=552","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T15:53:49.220Z] >>> HTTP REQUEST POST https://iam.googleapis.com/v1/projects/pet-project-backend-9c241/serviceAccounts/pet-project-backend-9c241@appspot.gserviceaccount.com:testIamPermissions  
+ {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2021-01-06T15:53:50.067Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 15:53:53 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T15:53:50.068Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/pet-project-backend-9c241  
+ 
+[debug] [2021-01-06T15:53:50.526Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 06 Jan 2021 15:53:53 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-06T15:53:50.841Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at validateString (internal/validators.js:120:11)
+    at Object.join (path.js:375:7)
+    at Object.checkFunctionsSDKVersion [as fn] (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\checkFirebaseSDKVersion.js:34:28)
+    at Command.<anonymous> (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:170:30)
+    at Generator.next (<anonymous>)
+    at fulfilled (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.

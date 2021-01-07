@@ -287,7 +287,7 @@ app.post('/adminlogin', async (req, res) => {
     }
 })
 
-app.get('/userlogin', authenticateToken, async (req, res) => {
+app.get('/userlogin', authenticateToken,  async (req, res) => {
     res.send(await getUserByEmail(req.user.name));
 })
 
@@ -319,7 +319,7 @@ app.post('/userprofile', authenticateToken, async (req, res) => {
     }
 })
 
-app.get('/all_users', authenticateToken, async (req, res) => {
+app.get('/all_users',  async (req, res) => {
     res.send(await getAllUsers());
 })
 
@@ -403,7 +403,7 @@ app.post('/pet_profile', authenticateToken, (req, res) => {
     }
 })
 
-app.get('/allpets', authenticateToken, async (req, res) => {
+app.get('/allpets', async (req, res) => {
     res.send(await getAllPets());
 })
 

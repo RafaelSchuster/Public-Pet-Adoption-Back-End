@@ -48,7 +48,6 @@ const addPet = async (newPet) => {
 }
 
 const updateUserProfile = async (userData) => {
-    console.log(userData)
     try {
         const {
             id,
@@ -74,7 +73,20 @@ const updateUserProfile = async (userData) => {
                 bio: bio
             }
         });
-        console.log('yes')
+        const col2 = db.collection('allAdmin');
+        updatingAdmin = await col2.updateOne({
+            id: parseInt(id)
+        }, {
+            $set: {
+                id: parseInt(id),
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                telephone: telephone,
+                petsOwned: petsOwned,
+                bio: bio
+            }
+        });
     } catch (error) {
         console.log(error);
     }
