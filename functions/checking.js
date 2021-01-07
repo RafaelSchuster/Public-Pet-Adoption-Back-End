@@ -13,7 +13,7 @@ const checkUser = (userData) => {
 
 const checkById = (log, id) => {
     for (let i = 0; i < log.length; i++) {
-        if (log[i].id === id) {
+        if (log[i].id === parseInt(id)) {
             return i;
         }
     }
