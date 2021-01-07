@@ -22,7 +22,8 @@ const petCount = require('./public/PetCount.json');
 const images = require('./public/ImagesLog.json');
 const { addUser, addPet, updateUserProfile, updatePetProfile, getAllUsers, getAllPets,
     onUserById, getUserByEmail, onPetById, onSearchByType, onAdvSearch, updatePetStatus,
-    updateOwnerStatus, savePet, unSavePet, checkDupes, getAdminByEmail, checkAdminDupes, addAdmin } = require('./mongoFuncs');
+    updateOwnerStatus, savePet, unSavePet, checkDupes, getAdminByEmail, checkAdminDupes,
+     addAdmin, addPetImg, getImgPathById } = require('./mongoFuncs');
 const { checkUser, checkById, getIdByParams, getPetsByType, getPetAdv } = require('./checking');
 app.use(express.json());
 app.use(cors());
@@ -57,30 +58,14 @@ app.use(express.static('images'));
 // upload.single('file')
 
 app.post('/image_upload/:id', authenticateToken, (req, res, next) => {
-    console.log(req.files)
-    cloudinary.uploader.upload(req.files.file.tempFilePath, (err, result)=>{
+    const { id } = req.params;
+    const{file} = req.files
+    console.log(req.files.file)
+    cloudinary.uploader.upload(file.tempFilePath, (err, result)=>{
         console.log('Error' + err);
         console.log(result)
+        addPetImg(id, result.url);
     })
-    const { id } = req.params;
-    const { originalname } = req.file;
-    const logObj = {
-        'id': parseInt(id),
-        "FileName": `${id}-${originalname}`,
-        "FilePath": req.file.path,
-    }
-    if (checkById(images, id) === false) {
-        images.push(logObj);
-        fs.writeFile('./public/ImagesLog.json', JSON.stringify(images, null, 2), (err, data) => {
-            if (err) console.log('Error in Image Upload');
-        })
-    }
-    else if (checkById(images, id) >= 0) {
-        images[checkById(images, id)] = logObj;
-        fs.writeFile('./public/ImagesLog.json', JSON.stringify(images, null, 2), (err, data) => {
-            if (err) console.log('Error in Image Upload');
-        })
-    }
 });
 
 app.post('/user_sign', async (req, res) => {
@@ -511,7 +496,7 @@ app.post('/pet_admin_edit', authenticateToken, (req, res) => {
 
 app.get('/images/:id', async (req, res) => {
     const { id } = req.params;
-    res.send(images[checkById(images, id)]);
+    res.send(await getImgPathById(id));
 })
 app.get('/pet_id/:name/type/:type', (req, res) => {
     console.log('yes')
