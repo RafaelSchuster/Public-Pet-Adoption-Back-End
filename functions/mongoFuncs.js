@@ -36,7 +36,6 @@ const addUser = async (newUser) => {
 }
 
 const addAdmin = async (newAdmin) => {
-    console.log(newAdmin)
     try {
         const db = client.db(dbName);
         const col = db.collection('allAdmin');
@@ -81,8 +80,25 @@ const updateUserProfile = async (userData) => {
                 bio: bio
             }
         });
-        const col2 = db.collection('allAdmin');
-        updatingAdmin = await col2.updateOne({
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const updateAdminProfile = async (userData) => {
+    try {
+        const {
+            id,
+            firstName,
+            lastName,
+            telephone,
+            email,
+            petsOwned,
+            bio
+        } = userData.post;
+        const db = client.db(dbName);
+        const col = db.collection('allAdmin');
+        updatingUser = await col.updateOne({
             id: parseInt(id)
         }, {
             $set: {
@@ -151,8 +167,9 @@ const checkDupes = async (email) => {
         return arrDupes;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
+
 const checkAdminDupes = async (email) => {
     try {
         let arrDupes = [];
@@ -165,7 +182,23 @@ const checkAdminDupes = async (email) => {
         return arrDupes;
     } catch (error) {
         console.log(error);
-    }
+    };
+}
+
+const getAllAdmins = async () => {
+    try {
+        const usersArr = [];
+        const db = client.db(dbName);
+        const col = db.collection('allAdmin');
+        onGetAllAdmins = await col.find({}).toArray();
+        onGetAllAdmins.forEach(el => usersArr.push(el));
+        for (let i = 0; i < usersArr.length; i++) {
+            usersArr[i].password = '';
+        };
+        return onGetAllAdmins;
+    } catch (error) {
+        console.log('Get All Admins Error');
+    };
 }
 
 const getAllUsers = async () => {
@@ -177,11 +210,11 @@ const getAllUsers = async () => {
         onGetAllUsers.forEach(el => usersArr.push(el));
         for (let i = 0; i < usersArr.length; i++) {
             usersArr[i].password = '';
-        }
+        };
         return usersArr;
     } catch (error) {
         console.log('Get All Users Error');
-    }
+    };
 }
 
 const getAllPets = async () => {
@@ -194,7 +227,7 @@ const getAllPets = async () => {
         return petsArr;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const onUserById = async (id) => {
@@ -204,12 +237,27 @@ const onUserById = async (id) => {
         userById = await col.findOne({
             id: parseInt(id)
         });
-        if (userById) userById.password = ''
+        if (userById) userById.password = '';
         return userById;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
+
+const onAdminById = async (id) => {
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allAdmin');
+        adminById = await col.findOne({
+            id: parseInt(id)
+        });
+        if (adminById) adminById.password = '';
+        return adminById;
+    } catch (error) {
+        console.log(error);
+    };
+}
+
 const getUserByEmail = async (email) => {
     try {
         const db = client.db(dbName);
@@ -217,11 +265,11 @@ const getUserByEmail = async (email) => {
         userByEmail = await col.findOne({
             email: email
         });
-        if (userByEmail) userByEmail.password = ''
+        if (userByEmail) userByEmail.password = '';
         return userByEmail;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const getAdminByEmail = async (email) => {
@@ -231,11 +279,11 @@ const getAdminByEmail = async (email) => {
         adminByEmail = await col.findOne({
             email: email
         });
-        if (adminByEmail) adminByEmail.password = ''
+        if (adminByEmail) adminByEmail.password = '';
         return adminByEmail;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const onPetById = async (id) => {
@@ -273,7 +321,7 @@ const onSearchByType = async (type) => {
         }
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const onAdvSearch = async (status, height, weight, type, name) => {
@@ -290,11 +338,11 @@ const onAdvSearch = async (status, height, weight, type, name) => {
         petAdvSearch = await col.find(filterObj).toArray();
         petAdvSearch.forEach(entry => {
             resultsArr.push(entry);
-        })
+        });
         return resultsArr;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const updatePetStatus = async (id, petStatus) => {
@@ -311,7 +359,7 @@ const updatePetStatus = async (id, petStatus) => {
         return updatingPetStatus;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const updateOwnerStatus = async (userEmail, petId, status) => {
@@ -321,7 +369,7 @@ const updateOwnerStatus = async (userEmail, petId, status) => {
             const col = db.collection('allUsers');
             findUser = await col.findOne({
                 email: userEmail
-            })
+            });
             let newPetsLog = [];
             if (findUser.petsOwned) newPetsLog = findUser.petsOwned;
             newPetsLog.push(petId);
@@ -337,8 +385,8 @@ const updateOwnerStatus = async (userEmail, petId, status) => {
             const col = db.collection('allUsers');
             findUser = await col.findOne({
                 email: userEmail
-            })
-            let newPetsLog = findUser.petsOwned
+            });
+            let newPetsLog = findUser.petsOwned;
             if (newPetsLog) {
                 newPetsLog = newPetsLog.filter(pet => pet !== petId);
                 updatingUser = await col.updateOne({
@@ -348,11 +396,11 @@ const updateOwnerStatus = async (userEmail, petId, status) => {
                         petsOwned: newPetsLog
                     }
                 });
-            }
-        }
+            };
+        };
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const savePet = async (userId, petId) => {
@@ -361,7 +409,7 @@ const savePet = async (userId, petId) => {
         const col = db.collection('allUsers');
         findUser = await col.findOne({
             id: parseInt(userId)
-        })
+        });
         let newSavedPetsLog = [];
         if (findUser.petsSaved) newSavedPetsLog = findUser.petsSaved;
         if (!newSavedPetsLog.includes(petId)) newSavedPetsLog.push(petId);
@@ -375,7 +423,7 @@ const savePet = async (userId, petId) => {
         return newSavedPetsLog;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const unSavePet = async (userId, petId) => {
@@ -398,7 +446,7 @@ const unSavePet = async (userId, petId) => {
         return newSavedPetsLog;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const addPetImg = async (id, path) => {
@@ -415,7 +463,7 @@ const addPetImg = async (id, path) => {
         return updatingPetImg;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
 const getImgPathById = async (id) => {
@@ -428,9 +476,27 @@ const getImgPathById = async (id) => {
         return petImgById.petImg;
     } catch (error) {
         console.log(error);
-    }
+    };
 }
 
+const getIdByQuery = async (name, type) => {
+    try {
+        const db = client.db(dbName);
+        const col = db.collection('allPets');
+        petIdByQuery = await col.findOne({
+            type: type,
+            name: name
+        });
+        return petIdByQuery;
+    } catch (error) {
+        console.log(error);
+    };
+}
+
+exports.updateAdminProfile = updateAdminProfile;
+exports.onAdminById = onAdminById;
+exports.getAllAdmins = getAllAdmins;
+exports.getIdByQuery = getIdByQuery;
 exports.getImgPathById = getImgPathById;
 exports.addPetImg = addPetImg;
 exports.checkAdminDupes = checkAdminDupes;
