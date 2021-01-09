@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+// const functions = require('firebase-functions');
 
 require('dotenv').config();
 const express = require('express');
@@ -675,4 +675,4 @@ app.listen(port, () => {
     console.log('Running on Port 5001');
 })
 
-exports.app = functions.https.onRequest(app);
+// exports.app = functions.https.onRequest(app);
