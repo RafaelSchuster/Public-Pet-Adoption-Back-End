@@ -457,7 +457,7 @@ const addPetImg = async (id, path) => {
             id: parseInt(id)
         }, {
             $set: {
-                petImg: path,
+                petImg: path
             }
         });
         return updatingPetImg;

@@ -1,0 +1,48 @@
+[debug] [2021-01-09T20:10:58.907Z] ----------------------------------------------------------------------
+[debug] [2021-01-09T20:10:58.909Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js deploy --only storage
+[debug] [2021-01-09T20:10:58.909Z] CLI Version:   8.17.0
+[debug] [2021-01-09T20:10:58.910Z] Platform:      win32
+[debug] [2021-01-09T20:10:58.910Z] Node Version:  v12.19.0
+[debug] [2021-01-09T20:10:58.910Z] Time:          Sat Jan 09 2021 22:10:58 GMT+0200 (Israel Standard Time)
+[debug] [2021-01-09T20:10:58.910Z] ----------------------------------------------------------------------
+[debug] [2021-01-09T20:10:58.910Z] 
+[debug] [2021-01-09T20:10:58.917Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-09T20:10:58.918Z] > authorizing via signed-in user
+[debug] [2021-01-09T20:10:58.918Z] [iam] checking project pet-project-backend-9c241 for permissions ["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2021-01-09T20:10:58.920Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pet-project-backend-9c241:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2021-01-09T20:11:00.025Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 09 Jan 2021 20:11:02 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=550","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-09T20:11:01.063Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at validateString (internal/validators.js:120:11)
+    at Object.join (path.js:375:7)
+    at Object.checkFunctionsSDKVersion [as fn] (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\checkFirebaseSDKVersion.js:34:28)
+    at Command.<anonymous> (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:170:30)
+    at Generator.next (<anonymous>)
+    at fulfilled (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2021-01-09T20:11:37.420Z] ----------------------------------------------------------------------
+[debug] [2021-01-09T20:11:37.422Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js deploy --only storage
+[debug] [2021-01-09T20:11:37.422Z] CLI Version:   8.17.0
+[debug] [2021-01-09T20:11:37.422Z] Platform:      win32
+[debug] [2021-01-09T20:11:37.422Z] Node Version:  v12.19.0
+[debug] [2021-01-09T20:11:37.423Z] Time:          Sat Jan 09 2021 22:11:37 GMT+0200 (Israel Standard Time)
+[debug] [2021-01-09T20:11:37.423Z] ----------------------------------------------------------------------
+[debug] [2021-01-09T20:11:37.423Z] 
+[debug] [2021-01-09T20:11:37.429Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-09T20:11:37.430Z] > authorizing via signed-in user
+[debug] [2021-01-09T20:11:37.430Z] [iam] checking project pet-project-backend-9c241 for permissions ["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2021-01-09T20:11:37.432Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pet-project-backend-9c241:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2021-01-09T20:11:38.340Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 09 Jan 2021 20:11:40 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=549","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-09T20:11:38.788Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at validateString (internal/validators.js:120:11)
+    at Object.join (path.js:375:7)
+    at Object.checkFunctionsSDKVersion [as fn] (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\checkFirebaseSDKVersion.js:34:28)
+    at Command.<anonymous> (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:170:30)
+    at Generator.next (<anonymous>)
+    at fulfilled (C:\Users\refael\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\command.js:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.

@@ -60,11 +60,11 @@ app.use(fileupload({
     useTempFiles: true
 }));
 
-cloudinary.config({
-    cloud_name: 'di2xmmv5e',
-    api_key: '131112575212727',
-    api_secret: 'zLLHjffan3B_wknRJTUb4Ox8FY8'
-});
+// cloudinary.config({
+//     cloud_name: 'di2xmmv5e',
+//     api_key: '131112575212727',
+//     api_secret: 'zLLHjffan3B_wknRJTUb4Ox8FY8'
+// });
 
 app.all('/*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -73,19 +73,27 @@ app.all('/*', function (req, res, next) {
     next();
 });
 
-app.post('/image_upload/:id', authenticateToken, (req, res, next) => {
+// app.post('/image_upload/:id', authenticateToken, (req, res, next) => {
+//     const {
+//         id
+//     } = req.params;
+//     const {
+//         file
+//     } = req.files;
+//     cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+//         if (err) console.log(err);
+//         addPetImg(id, result.url);
+//         res.send('Image Uploaded Succesfully');
+//     })
+// });
+
+app.post('/image_url/:id', authenticateToken, (req, res) => {
+    const pathUrl = req.body.post;
     const {
         id
-    } = req.params;
-    const {
-        file
-    } = req.files;
-    cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-        if (err) console.log(err);
-        addPetImg(id, result.url);
-        res.send('Image Uploaded Succesfully');
-    })
-});
+    } = req.params
+    addPetImg(id, pathUrl )
+})
 
 app.post('/user_sign', async (req, res) => {
     const schema = Joi.object().keys({
