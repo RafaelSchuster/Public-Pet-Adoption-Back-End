@@ -167,7 +167,7 @@ const checkDupes = async (email) => {
         return arrDupes;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const checkAdminDupes = async (email) => {
@@ -182,7 +182,7 @@ const checkAdminDupes = async (email) => {
         return arrDupes;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const getAllAdmins = async () => {
@@ -194,11 +194,11 @@ const getAllAdmins = async () => {
         onGetAllAdmins.forEach(el => usersArr.push(el));
         for (let i = 0; i < usersArr.length; i++) {
             usersArr[i].password = '';
-        };
+        }
         return onGetAllAdmins;
     } catch (error) {
         console.log('Get All Admins Error');
-    };
+    }
 }
 
 const getAllUsers = async () => {
@@ -210,11 +210,11 @@ const getAllUsers = async () => {
         onGetAllUsers.forEach(el => usersArr.push(el));
         for (let i = 0; i < usersArr.length; i++) {
             usersArr[i].password = '';
-        };
+        }
         return usersArr;
     } catch (error) {
         console.log('Get All Users Error');
-    };
+    }
 }
 
 const getAllPets = async () => {
@@ -227,7 +227,7 @@ const getAllPets = async () => {
         return petsArr;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const onUserById = async (id) => {
@@ -241,7 +241,7 @@ const onUserById = async (id) => {
         return userById;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const onAdminById = async (id) => {
@@ -255,7 +255,7 @@ const onAdminById = async (id) => {
         return adminById;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const getUserByEmail = async (email) => {
@@ -269,7 +269,7 @@ const getUserByEmail = async (email) => {
         return userByEmail;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const getAdminByEmail = async (email) => {
@@ -283,7 +283,7 @@ const getAdminByEmail = async (email) => {
         return adminByEmail;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const onPetById = async (id) => {
@@ -321,7 +321,7 @@ const onSearchByType = async (type) => {
         }
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const onAdvSearch = async (status, height, weight, type, name) => {
@@ -342,7 +342,7 @@ const onAdvSearch = async (status, height, weight, type, name) => {
         return resultsArr;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const updatePetStatus = async (id, petStatus) => {
@@ -359,7 +359,7 @@ const updatePetStatus = async (id, petStatus) => {
         return updatingPetStatus;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const updateOwnerStatus = async (userEmail, petId, status) => {
@@ -396,11 +396,11 @@ const updateOwnerStatus = async (userEmail, petId, status) => {
                         petsOwned: newPetsLog
                     }
                 });
-            };
-        };
+            }
+        }
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const savePet = async (userId, petId) => {
@@ -423,7 +423,7 @@ const savePet = async (userId, petId) => {
         return newSavedPetsLog;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const unSavePet = async (userId, petId) => {
@@ -446,7 +446,7 @@ const unSavePet = async (userId, petId) => {
         return newSavedPetsLog;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const addPetImg = async (id, path) => {
@@ -463,7 +463,7 @@ const addPetImg = async (id, path) => {
         return updatingPetImg;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const getImgPathById = async (id) => {
@@ -476,7 +476,7 @@ const getImgPathById = async (id) => {
         return petImgById.petImg;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 const getIdByQuery = async (name, type) => {
@@ -490,7 +490,7 @@ const getIdByQuery = async (name, type) => {
         return petIdByQuery;
     } catch (error) {
         console.log(error);
-    };
+    }
 }
 
 exports.updateAdminProfile = updateAdminProfile;

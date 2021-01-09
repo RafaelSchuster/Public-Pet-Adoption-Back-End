@@ -154,9 +154,9 @@ app.post('/user_sign', async (req, res) => {
             });
         } catch (error) {
             res.status(500).send('500 status error');
-        };
+        }
         addUser(newUser);
-    };
+    }
 })
 
 app.post('/admin_sign', async (req, res) => {
@@ -171,7 +171,7 @@ app.post('/admin_sign', async (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -227,9 +227,9 @@ app.post('/admin_sign', async (req, res) => {
             });
         } catch (error) {
             res.status(500).send('500 status error Admin Sign');
-        };
+        }
         addAdmin(newAdmin);
-    };
+    }
 })
 
 app.get('/checkdupes/:email', async (req, res) => {
@@ -266,7 +266,7 @@ app.post('/userlogin', async (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -274,7 +274,7 @@ app.post('/userlogin', async (req, res) => {
         user = allUsers.find(user => user.email === req.body.post.email);
         if (user === null) {
             return res.status(400).send('Cannot find user');
-        };
+        }
         try {
             if (await bcrypt.compare(req.body.post.password, user.password)) {
                 const userEmail = req.body.post.email;
@@ -287,11 +287,11 @@ app.post('/userlogin', async (req, res) => {
                 });
             } else {
                 res.send('Not Allowed');
-            };
+            }
         } catch (error) {
             res.status(500).send();
-        };
-    };
+        }
+    }
 })
 
 app.post('/adminlogin', async (req, res) => {
@@ -303,7 +303,7 @@ app.post('/adminlogin', async (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -311,7 +311,7 @@ app.post('/adminlogin', async (req, res) => {
         admin = allAdmin.find(admin => admin.email === req.body.post.email);
         if (admin === null) {
             return res.status(400).send('Cannot find user');
-        };
+        }
         try {
             if (await bcrypt.compare(req.body.post.password, admin.password)) {
                 const adminEmail = req.body.post.email;
@@ -324,11 +324,11 @@ app.post('/adminlogin', async (req, res) => {
                 });
             } else {
                 res.send('Not Allowed');
-            };
+            }
         } catch (error) {
             res.status(500).send();
-        };
-    };
+        }
+    }
 })
 
 app.get('/userlogin', authenticateToken, async (req, res) => {
@@ -360,7 +360,7 @@ app.post('/userprofile', authenticateToken, async (req, res) => {
     } else {
         updateUserProfile(req.body);
         res.send(JSON.stringify('Succesfully Updated'));
-    };
+    }
 })
 
 app.post('/adminprofile', authenticateToken, async (req, res) => {
@@ -384,7 +384,7 @@ app.post('/adminprofile', authenticateToken, async (req, res) => {
     } else {
         updateAdminProfile(req.body);
         res.send(JSON.stringify('Succesfully Updated'));
-    };
+    }
 })
 
 app.get('/all_users', authenticateToken, async (req, res) => {
@@ -409,7 +409,7 @@ app.post('/pet_profile', authenticateToken, (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -466,7 +466,7 @@ app.post('/pet_profile', authenticateToken, (req, res) => {
         });
         addPet(newPetProfile);
         res.send(JSON.stringify('Succesfully Uploaded'));
-    };
+    }
 })
 
 app.get('/alladmins', authenticateToken, async (req, res) => {
@@ -510,7 +510,7 @@ app.post('/user_admin_edit', authenticateToken, (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -530,7 +530,7 @@ app.post('/user_admin_edit', authenticateToken, (req, res) => {
         });
         updateUserProfile(req.body.post);
         res.send(JSON.stringify('Succesfully Updated'));
-    };
+    }
 })
 app.post('/admin_profile_edit', authenticateToken, (req, res) => {
     const schema = Joi.object().keys({
@@ -546,7 +546,7 @@ app.post('/admin_profile_edit', authenticateToken, (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -566,7 +566,7 @@ app.post('/admin_profile_edit', authenticateToken, (req, res) => {
         });
         updateUserProfile(req.body.post);
         res.send(JSON.stringify('Succesfully Updated'));
-    };
+    }
 })
 
 app.post('/pet_admin_edit', authenticateToken, (req, res) => {
@@ -587,7 +587,7 @@ app.post('/pet_admin_edit', authenticateToken, (req, res) => {
         if (err) {
             console.log(err);
             res.send(err).end();
-        };
+        }
     });
     if (validation.error && validation.error.details[0].message) {
         res.send(JSON.stringify(validation.error.details[0].message)).end();
@@ -604,7 +604,7 @@ app.post('/pet_admin_edit', authenticateToken, (req, res) => {
         });
         updatePetProfile(req.body.post);
         res.send(JSON.stringify('Succesfully Uploaded'));
-    };
+    }
 })
 
 app.get('/images/:id', async (req, res) => {
