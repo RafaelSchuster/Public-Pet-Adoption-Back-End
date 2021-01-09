@@ -387,6 +387,10 @@ app.post('/adminprofile', authenticateToken, async (req, res) => {
     }
 })
 
+app.get('/', (req, res)=>{
+    res.send('Welcome to the server side')
+});
+
 app.get('/all_users', authenticateToken, async (req, res) => {
     res.send(await getAllUsers());
 })
